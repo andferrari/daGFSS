@@ -11,7 +11,7 @@ using LaTeXStrings
 include("optimisation_func.jl")
 
 # calcul des valeurs propres
-g = loadgraph("/Users/lverduci/Documents/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = LightGraphs.laplacian_matrix(g)
 d, v = eigen(Array(L));
 λmax=maximum(d)
