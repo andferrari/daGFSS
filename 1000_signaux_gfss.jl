@@ -129,24 +129,24 @@ plot(plt15,plt25)
 savefig("1FA_3.png")
 
 
-#création signaux sans changement de comportement "sig2" "sig2_1_20" "sig2_5_5" "sig2_rand"
+#création signaux sans changement de comportement "sig2" "sig2_1_6" "sig2_5_5" "sig2_rand"
 for k in 1:nb
-    sig2[:,(k-1)*512+1:k*512]= gener_sigg(g, node_labels, 1.0, 2, 1.0, σ2 =10);
+    sig2[:,(k-1)*512+1:k*512]= gener_sigg(g, node_labels, 1.0, 2, 3.0, σ2 =6);
     t_iaGFSS2[:,(k-1)*512+1:k*512] = iaGFSS(sig2[:,(k-1)*512+1:k*512], ρ, d, v; λ = 0.01, Λ = 0.1)
     t_aGFSS2[k,:] = [norm(t_iaGFSS2[:,i])^2 for i in (k-1)*512+1:k*512]
     t_diaGFSS2[:,(k-1)*512+1:k*512] = diaGFSS(sig2[:,(k-1)*512+1:k*512], L, 0.01, 0.01, 0.1; λ = 0.01, Λ=0.1)
     t_daGFSS2[k,:] = [norm(t_diaGFSS2[:,i])^2 for i in (k-1)*512+1:k*512]
 end
 
-writedlm( "sig2_rand.csv",  sig2)
-writedlm( "t_aGFSS2rand.csv",  t_aGFSS2)
-writedlm( "t_diaGFSS2_15.csv",  t_diaGFSS2)
-writedlm( "t_daGFSS2_15.csv",  t_daGFSS2)
+writedlm( "sig2_6.csv",  sig2)
+writedlm( "t_aGFSS2_6.csv",  t_aGFSS2)
+writedlm( "t_diaGFSS2_6.csv",  t_diaGFSS2)
+writedlm( "t_daGFSS2_6.csv",  t_daGFSS2)
 
-sig2 = readdlm("sig2_1_20.csv")
-t_aGFSS2 = readdlm("t_aGFSS21_20.csv")
-t_diaGFSS2 = readdlm("t_diaGFSS2_15.csv")
-t_daGFSS2 = readdlm("t_daGFSS2_15.csv")
+sig2 = readdlm("sig2_6.csv")
+t_aGFSS2 = readdlm("t_aGFSS2_6.csv")
+t_diaGFSS2 = readdlm("t_diaGFSS2_6.csv")
+t_daGFSS2 = readdlm("t_daGFSS2_6.csv")
 
 
 pas=0.1
