@@ -71,7 +71,7 @@ nt=512 #temps d'étude
 init=250
 fin=512
 x=init:1:fin
-sig1= gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 7);
+sig1, rnd= gener_sigg(g, node_labels, 3.0,4, 3.0, σ2 = 7);
 s1=sig1[findall(in(1), node_labels), x]
 m1=mean(s1,dims=1)
 plt1=plot(x,m1',ribbon=sqrt(3)*ones(512), color=RGB(1,136/255,5/255),label="")
@@ -134,22 +134,23 @@ rnd
 t_change=detect_t_change(t_aGFSS ,ρ , d, v,T2; λ = 0.01, Λ=0.1 )
 r=Int(floor(length(t_change)*rand(1)[1]))
 n_change=detect_n_change(sig1 , t_iaGFSS,ρ , d, v,t_change[r],T; λ = 0.01, Λ=0.1 )
-detect=detect_change(node_labels, sig1,t_aGFSS, t_iaGFSS, t_change ,ρ , d, v,T, T2; λ = 0.01, Λ=0.1)
+detect=detect_change(node_labels, sig1,t_aGFSS, t_iaGFSS, t_change ,ρ , d, v,T, T2, 50; λ = 0.01, Λ=0.1)
 
 # ############################################
 
 # detection algorithme 2
-φ[132]
-ψ[253]
-c=optim_c(a, b, ρ, φ[132], ψ[253])
+φ[78]
+ψ[200]
+c=optim_c(a, b, ρ, φ[15], ψ[185])
 t_diaGFSS = diaGFSS(sig1, L, ψ[253], φ[132], c; λ = 0.01, Λ=0.1)
 plot(t_diaGFSS', xlabel="temps", ylabel="t_diaGFSS", label="")
-T3=get_threshold(t_diaGFSS,0.006,1.8,20)
+# T3=get_threshold(t_diaGFSS,0.006,1.8,8) adaptatif
+T3=ones(250,512)
 p6 = plot(t_diaGFSS', xlabel="temps", ylabel="t_diaGFSS")
 p7 = plot(T3', xlabel="temps", ylabel="seuil")
 
 
-q=1
+q=9
 p8=same_plot(t_diaGFSS[q,:],T3[q,:])
 plot(p8', xlabel="temps", ylabel="seuil noeud q")
 
@@ -166,7 +167,7 @@ rnd
 t_change2=detect_t_change(t_daGFSS[250:512] ,ρ , d, v,T4; λ = 0.01, Λ=0.1 ).+init
 r2=Int(floor(length(t_change2)*rand(1)[1]))
 n_change2=detect_n_change(sig1 , t_diaGFSS,ρ , d, v,t_change2[r2],T3; λ = 0.01, Λ=0.1 )
-detect=detect_change(node_labels,sig1,t_daGFSS,t_diaGFSS, t_change2 ,ρ , d, v,T3, T4; λ = 0.01, Λ=0.1)
+detect=detect_change(node_labels,sig1,t_daGFSS,t_diaGFSS, t_change2 ,ρ , d, v,T3, T4, 30; λ = 0.01, Λ=0.1)
 
 
 #savefig(plt, "res.pdf")

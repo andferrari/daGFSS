@@ -41,7 +41,7 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
     end
 
     if choice==4
-        for k in 1:maximum(node_labels)
+        for k in 1:4
             index_nodes = findall(in(k), node_labels)
             sig1[index_nodes,:] .= α*(k-1)
             rnd[:,k]=rand(index_nodes,min(4,length(index_nodes)))
