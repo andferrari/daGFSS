@@ -151,7 +151,7 @@ t_daGFSS2 = readdlm("t_daGFSS2_6.csv")
 
 pas=0.1
 mini=round(minimum(t_aGFSS2[:,init:fin]))
-maxi=round(maximum(t_aGFSS2[:,init:fin]))-60
+maxi=round(maximum(t_aGFSS2[:,init:fin]))-2
 x=(mini+pas):pas:maxi
 T1000=tab_threshold(mini,maxi,pas,nt)
 pdetect2, pfausse2, moytot_interpics2, retardtot2, tdetecttot2= performance_algo(nt, t_aGFSS2,ρ ,d ,v ,T1000)
@@ -161,8 +161,5 @@ pdetect2, pfausse2, moytot_interpics2, retardtot2, tdetecttot2= performance_algo
 Plots.plot(x,pfausse2, xlabel="seuil", ylabel="pfa")
 
 plot(t_aGFSS2[100,init:fin], xlabel="temps", ylabel="t_aGFSS")
-plot(t_interpic2[800,:,100], xlabel="temps", ylabel="temps entre les différents pics")
-plot(x,nbpics2[800,:], xlabel="seuil", ylabel="nb pics (1signal)")
-plot(x,moy_interpics2[800,:],xlabel="seuil", ylabel="moyenne du temps entre chaque pic ")
 plot(pfausse2,moytot_interpics2, xlabel="seuil", ylabel="moyenne du temps entre chaque pic ")
 plot(x,tdetecttot2, xlabel="seuil", ylabel="temps 1ère FA ")
