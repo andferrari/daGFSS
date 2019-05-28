@@ -87,7 +87,7 @@ T1000=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
 
 # verification des performances de la methode utilisée
-pdetect, pfausse, moytot_interpics, retardtot, tdetecttot= performance_algo(nt, t_aGFSS,ρ[2] ,d ,v ,T1000)
+pdetect, pfausse, retardtot, tdetecttot= performance_algo(nt, t_aGFSS,ρ[2] ,d ,v ,T1000)
 
 plt=same_plot(pdetect,pfausse)
 plt11=plot(x,plt', xlabel="seuil", ylabel="%", label=["pd" "pfa"])
@@ -106,7 +106,7 @@ maxi=round(maximum(t_daGFSS[:,init:fin])*10000)/10000
 x=(mini+pas):pas:maxi
 T1000=tab_threshold(mini,maxi,pas,nt)
 
-pdetect3, pfausse3, moytot_interpics3, retardtot3, tdetecttot3= performance_algo(nt, t_daGFSS,ρ ,d ,v ,T1000)
+pdetect3, pfausse3, retardtot3, tdetecttot3= performance_algo(nt, t_daGFSS,ρ ,d ,v ,T1000)
 
 p20=same_plot(pdetect3,pfausse3)
 plt21=plot(x,p20', xlabel="seuil", ylabel="%", label=["pd" "pfa"])
