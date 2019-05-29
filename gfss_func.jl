@@ -76,6 +76,13 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
 end
 
+function calcul_psi_phi(p,r)
+    ψ=ones(length(r))./r
+    φ=r.*ψ
+    return φ, ψ
+end
+
+
 
 function colorbar(cmap, min, mid, max)
     n = length(cmap)
@@ -121,6 +128,11 @@ function make_my_graph()
     #G = gsp.Community(N=250, Nc=3, comm_sizes=[50, 120, 80], seed=42)
     g = SimpleDiGraph(G.A.todense())
     savegraph("MyGraph.graphml", g, GraphIO.GraphML.GraphMLFormat())
+end
+
+function NormalizedLaplacian(g)
+    adjmat = LightGraphs.LinAlg.CombinatorialAdjacency(adjacency_matrix(g))
+    I - Diagonal(adjmat.D.^(-1/2))*(adjmat.A)*Diagonal(adjmat.D.^(-1/2))
 end
 
 #function argument_min(λ, Λ, nv)
