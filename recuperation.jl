@@ -134,9 +134,9 @@ detect=detect_change(node_labels, sig1,t_aGFSS, t_iaGFSS, t_change ,ρ , d, v,T,
 # ############################################
 
 # detection algorithme 2
-φ[103]
-ψ[200]
-c=optim_c(a, b, ρ, φ[103], ψ[200])
+
+φ, ψ=calcul_psi_phi(poles, residues)
+
 t_diaGFSS = diaGFSS(sig1, L, ψ[253], φ[132], c; λ = 0.01, Λ=0.1)
 plot(t_diaGFSS', xlabel="temps", ylabel="t_diaGFSS", label="")
 savefig("t_diaGFSS_sig1-4.pdf")
