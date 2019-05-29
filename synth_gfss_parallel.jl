@@ -54,19 +54,7 @@ for k in 1:ka
 end
 hμ_va = Diagonal(hμ)*va
 
-# 1. Simple Least squares => unstable
-#
-# H = hcat(vb, -hμ_va)
-# ls = H\hμ
-#
-# pb_ls = Poly(ls[1:kb+1])
-# pa_ls = Poly([1; ls[kb+2:end]])
-#
-# arma_ls = [polyval(pb_ls, μ)/polyval(pa_ls, μ) for μ in μ]
-# println("modules poles LS : ",abs.(roots(pa_ls)), ", λmax/2 : ", λmax/2)
-# plot!(μ , arma_ls, w=2, label="ARMA LS")
-
-# 2. Constrained least squares with CVX
+# Constrained least squares with CVX
 
 a_cvx = Variable(ka)
 b_cvx = Variable(kb+1)
@@ -79,25 +67,9 @@ pb_cvx = Poly(dropdims(b_cvx.value, dims=2))
 pa_cvx = Poly([1; dropdims(a_cvx.value, dims=2)])
 arma_cvx = [polyval(pb_cvx, μ)/polyval(pa_cvx, μ) for μ in μ]
 
-# println("modules poles CVX : ",abs.(roots(pa_cvx)), ", λmax/2 : ", λmax/2)
-
 maximum(abs.(roots(pa_cvx))) < λmax/2 ? error("unstable graph filter") :
 
-# 3. Refined => useless
-
-# a_refined = dropdims(a_cvx.value, dims=2)
-# vb_ref = zeros(n_μ, ka+1)
-# for k in 1:ka+1
-#     vb_ref[:,k] = μ.^(k-1)
-# end
-# b_refined = vb_ref\(hμ_va*a_refined + hμ)
-#
-# pb_refined = Poly(b_refined)
-# pa_refined = pa_cvx
-# arma_refined = [polyval(pb_refined, μ)/polyval(pa_refined, μ) for μ in μ]
-# plot!(μ , arma_refined, label="ARMA refined")
-
-# residue with matlab
+# compute residue with matlab
 
 a_final = reverse([1; dropdims(a_cvx.value, dims=2)])
 b_final = reverse(dropdims(b_cvx.value, dims=2))
@@ -110,5 +82,23 @@ for (pole, residue) in zip(poles, residues)
 end
 arma_parallel = real.(arma_parallel)
 
-plot(μ, hμ, label=L"h^\ast(\mu)")
-plot!(μ , arma_parallel, w=2, label="order 4 parallel ARMA")
+plot(μ .+ λmax/2, hμ, w=3, label=L"GFSS \ filter: \ h^\ast(\mu)", dpi=600)
+plot!(μ .+ λmax/2, arma_parallel, w=3, label= "Order 4 parallel ARMA GFSS", xlabel = L"\mu", dpi=600)
+
+
+# julia> poles
+# 4-element Array{Complex{Float64},1}:
+#   0.8748969843858525 + 0.5747054405842672im
+#   0.8748969843858525 - 0.5747054405842672im
+#  -0.7285516058955004 + 0.5746831597316937im
+#  -0.7285516058955004 - 0.5746831597316937im
+#
+#  julia> residues
+# 4-element Array{Complex{Float64},1}:
+#  -0.11419392350542883 - 0.10630527603739182im
+#  -0.11419392350542877 + 0.10630527603739177im
+#   0.17839845033985413 - 0.6978803839459782im
+#   0.17839845033985413 + 0.6978803839459782im
+#
+#  julia> addTerm
+#   0.41950040212415846
