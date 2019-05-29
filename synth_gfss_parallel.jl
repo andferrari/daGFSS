@@ -30,8 +30,9 @@ Lc = Ln - (λmax/2)*I
 
 # filter response
 
+ρ = 1/0.3
 h(μ) = min.(ρ, sqrt.(ρ./(μ.+λmax/2)))
-ρ = 3
+
 
 n_μ = 300
 μ = range(-λmax/2, stop = λmax/2, length = n_μ)
@@ -67,7 +68,7 @@ pb_cvx = Poly(dropdims(b_cvx.value, dims=2))
 pa_cvx = Poly([1; dropdims(a_cvx.value, dims=2)])
 arma_cvx = [polyval(pb_cvx, μ)/polyval(pa_cvx, μ) for μ in μ]
 
-maximum(abs.(roots(pa_cvx))) < λmax/2 ? error("unstable graph filter") :
+minimum(abs.(roots(pa_cvx))) < λmax/2 ? error("unstable graph filter") : nothing
 
 # compute residue with matlab
 
@@ -82,23 +83,25 @@ for (pole, residue) in zip(poles, residues)
 end
 arma_parallel = real.(arma_parallel)
 
-plot(μ .+ λmax/2, hμ, w=3, label=L"GFSS \ filter: \ h^\ast(\mu)", dpi=600)
-plot!(μ .+ λmax/2, arma_parallel, w=3, label= "Order 4 parallel ARMA GFSS", xlabel = L"\mu", dpi=600)
+Plots.reset_defaults()
+Plots.scalefontsizes(2)
+plot(μ .+ λmax/2, hμ, w=3, label="GFSS filter: \$ h^\\ast(\\mu)\$", dpi=600)
+plot!(μ .+ λmax/2, arma_parallel, w=3, label= "ARMA\$_4\$ GFSS", xlabel = L"\mu", dpi=600)
 
-
+# savefig("../paper/figs/approx_filt.png")
 # julia> poles
 # 4-element Array{Complex{Float64},1}:
-#   0.8748969843858525 + 0.5747054405842672im
-#   0.8748969843858525 - 0.5747054405842672im
-#  -0.7285516058955004 + 0.5746831597316937im
-#  -0.7285516058955004 - 0.5746831597316937im
+#   0.7344635585485741 + 0.5293681924014867im
+#   0.7344635585485741 - 0.5293681924014867im
+#  -0.7344635202651353 + 0.5293681751822871im
+#  -0.7344635202651353 - 0.5293681751822871im
 #
-#  julia> residues
+# julia> residues
 # 4-element Array{Complex{Float64},1}:
-#  -0.11419392350542883 - 0.10630527603739182im
-#  -0.11419392350542877 + 0.10630527603739177im
-#   0.17839845033985413 - 0.6978803839459782im
-#   0.17839845033985413 + 0.6978803839459782im
+#  -0.05322205451164147 - 0.08206089787078102im
+#  -0.05322205451164147 + 0.08206089787078102im
+#   0.16044187053514897 - 0.6853621323079733im
+#   0.16044187053514897 + 0.6853621323079733im
 #
-#  julia> addTerm
-#   0.41950040212415846
+# julia> addTerm
+# 0.6682305081233931
