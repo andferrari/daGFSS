@@ -21,27 +21,25 @@ end
 
 g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 
-#L = laplacian_matrix(g)
-#d, v = eigen(Array(L));
-
 Ln = NormalizedLaplacian(g)
 d, v = eigen(Array(Ln));
 λmax = maximum(d)#d[nv(g)]
 
+# center normalized Laplacian => |eigen(Lc)| < 1
 Lc = Ln - (λmax/2)*I
+
+# filter response
 
 h(μ) = min.(ρ, sqrt.(ρ./(μ.+λmax/2)))
 ρ = 3
 
-# ARMA approximation
 n_μ = 300
 μ = range(-λmax/2, stop = λmax/2, length = n_μ)
-
 hμ = h(μ)
 
-plot(μ, hμ, label=L"h^\ast(\mu)")
+# approximation
 
-kb = 4 # num. order   \sum_{i=0}^kb b_i μ^i
+kb = 4  # num. order   \sum_{i=0}^kb b_i μ^i
 ka = 4  # denum. order 1 + \sum_{i=1}^ka a_i μ^i
 radius = 0.1
 
@@ -56,7 +54,7 @@ for k in 1:ka
 end
 hμ_va = Diagonal(hμ)*va
 
-# Least squares
+# 1. Simple Least squares => unstable
 #
 # H = hcat(vb, -hμ_va)
 # ls = H\hμ
@@ -68,7 +66,7 @@ hμ_va = Diagonal(hμ)*va
 # println("modules poles LS : ",abs.(roots(pa_ls)), ", λmax/2 : ", λmax/2)
 # plot!(μ , arma_ls, w=2, label="ARMA LS")
 
-# constrained least squares with CVX
+# 2. Constrained least squares with CVX
 
 a_cvx = Variable(ka)
 b_cvx = Variable(kb+1)
@@ -85,7 +83,7 @@ arma_cvx = [polyval(pb_cvx, μ)/polyval(pa_cvx, μ) for μ in μ]
 
 maximum(abs.(roots(pa_cvx))) < λmax/2 ? error("unstable graph filter") :
 
-# Refined -> useless
+# 3. Refined => useless
 
 # a_refined = dropdims(a_cvx.value, dims=2)
 # vb_ref = zeros(n_μ, ka+1)
@@ -112,4 +110,5 @@ for (pole, residue) in zip(poles, residues)
 end
 arma_parallel = real.(arma_parallel)
 
-plot(μ , arma_parallel, w=2, label="ARMA PARALLEL")
+plot(μ, hμ, label=L"h^\ast(\mu)")
+plot!(μ , arma_parallel, w=2, label="order 4 parallel ARMA")
