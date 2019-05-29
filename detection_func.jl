@@ -73,7 +73,7 @@ function get_threshold(GFSS, n, a, init)
 end
 
 #detection du changement dans les clusters
-function detect_change(node_labels,sig,t_aGFSS, t_iaGFSS, t_change, ρ , d, v,T, T2; λ = 0.01, Λ=0.1)
+function detect_change(node_labels,sig,t_aGFSS, t_iaGFSS, t_change, ρ , d, v,T, T2, s; λ = 0.01, Λ=0.1)
     detect=zeros(maximum(node_labels))
     for k in 1:length(t_change)
         n_change=detect_n_change(sig ,t_iaGFSS ,ρ , d, v,t_change[k],T; λ = 0.01, Λ=0.1 )
@@ -88,7 +88,7 @@ function detect_change(node_labels,sig,t_aGFSS, t_iaGFSS, t_change, ρ , d, v,T,
         end
     end
     for k in 1:length(detect)
-        if detect[k]>=80
+        if detect[k]>=s
             println("le groupe $k a changé de comportement")
         end
     end

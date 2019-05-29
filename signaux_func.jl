@@ -15,7 +15,12 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
         sig1[findall(in(1), node_labels), n_rupt:n_rupt+Δ_rupt] .+= pertu
 
         sig1 += sqrt(σ2) * randn(nv(g), nt)
-        return sig1
+        for k in 5:8
+            index_nodes = findall(in(k), node_labels)
+            rnd[:,k]=rand(index_nodes,min(4,length(index_nodes)))
+            sig1[rnd[:,k], n_rupt-100:n_rupt-100+Δ_rupt-1] .+= pertu
+        end
+        return sig1,rnd
     end
     if choice ==2
         for k in 1:length(node_labels)
@@ -41,7 +46,7 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
     end
 
     if choice==4
-        for k in 1:maximum(node_labels)
+        for k in 1:4
             index_nodes = findall(in(k), node_labels)
             sig1[index_nodes,:] .= α*(k-1)
             rnd[:,k]=rand(index_nodes,min(4,length(index_nodes)))

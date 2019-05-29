@@ -87,7 +87,7 @@ T1000=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
 
 # verification des performances de la methode utilisée
-pdetect, pfausse, moytot_interpics, retardtot, tdetecttot= performance_algo(nt, t_aGFSS,ρ[2] ,d ,v ,T1000)
+pdetect, pfausse, retardtot, tdetecttot= performance_algo(nt, t_aGFSS,ρ[2] ,d ,v ,T1000)
 
 plt=same_plot(pdetect,pfausse)
 plt11=plot(x,plt', xlabel="seuil", ylabel="%", label=["pd" "pfa"])
@@ -106,7 +106,7 @@ maxi=round(maximum(t_daGFSS[:,init:fin])*10000)/10000
 x=(mini+pas):pas:maxi
 T1000=tab_threshold(mini,maxi,pas,nt)
 
-pdetect3, pfausse3, moytot_interpics3, retardtot3, tdetecttot3= performance_algo(nt, t_daGFSS,ρ ,d ,v ,T1000)
+pdetect3, pfausse3, retardtot3, tdetecttot3= performance_algo(nt, t_daGFSS,ρ ,d ,v ,T1000)
 
 p20=same_plot(pdetect3,pfausse3)
 plt21=plot(x,p20', xlabel="seuil", ylabel="%", label=["pd" "pfa"])
@@ -129,29 +129,29 @@ plot(plt15,plt25)
 savefig("1FA_3.png")
 
 
-#création signaux sans changement de comportement "sig2" "sig2_1_6" "sig2_5_5" "sig2_rand"
+#création signaux sans changement de comportemegitnt "sig2" "sig2_1_20" "sig2_5_5" "sig2_rand"
 for k in 1:nb
-    sig2[:,(k-1)*512+1:k*512]= gener_sigg(g, node_labels, 1.0, 2, 3.0, σ2 =6);
+    sig2[:,(k-1)*512+1:k*512]= gener_sigg(g, node_labels, 1.0, 2, 1.0, σ2 =10);
     t_iaGFSS2[:,(k-1)*512+1:k*512] = iaGFSS(sig2[:,(k-1)*512+1:k*512], ρ, d, v; λ = 0.01, Λ = 0.1)
     t_aGFSS2[k,:] = [norm(t_iaGFSS2[:,i])^2 for i in (k-1)*512+1:k*512]
     t_diaGFSS2[:,(k-1)*512+1:k*512] = diaGFSS(sig2[:,(k-1)*512+1:k*512], L, 0.01, 0.01, 0.1; λ = 0.01, Λ=0.1)
     t_daGFSS2[k,:] = [norm(t_diaGFSS2[:,i])^2 for i in (k-1)*512+1:k*512]
 end
 
-writedlm( "sig2_6.csv",  sig2)
-writedlm( "t_aGFSS2_6.csv",  t_aGFSS2)
-writedlm( "t_diaGFSS2_6.csv",  t_diaGFSS2)
-writedlm( "t_daGFSS2_6.csv",  t_daGFSS2)
+writedlm( "sig2_rand.csv",  sig2)
+writedlm( "t_aGFSS2rand.csv",  t_aGFSS2)
+writedlm( "t_diaGFSS2_15.csv",  t_diaGFSS2)
+writedlm( "t_daGFSS2_15.csv",  t_daGFSS2)
 
-sig2 = readdlm("sig2_6.csv")
-t_aGFSS2 = readdlm("t_aGFSS2_6.csv")
-t_diaGFSS2 = readdlm("t_diaGFSS2_6.csv")
-t_daGFSS2 = readdlm("t_daGFSS2_6.csv")
+sig2 = readdlm("sig2_1_20.csv")
+t_aGFSS2 = readdlm("t_aGFSS21_20.csv")
+t_diaGFSS2 = readdlm("t_diaGFSS2_15.csv")
+t_daGFSS2 = readdlm("t_daGFSS2_15.csv")
 
 
 pas=0.1
 mini=round(minimum(t_aGFSS2[:,init:fin]))
-maxi=round(maximum(t_aGFSS2[:,init:fin]))-2
+maxi=round(maximum(t_aGFSS2[:,init:fin]))-60
 x=(mini+pas):pas:maxi
 T1000=tab_threshold(mini,maxi,pas,nt)
 pdetect2, pfausse2, moytot_interpics2, retardtot2, tdetecttot2= performance_algo(nt, t_aGFSS2,ρ ,d ,v ,T1000)
@@ -161,5 +161,8 @@ pdetect2, pfausse2, moytot_interpics2, retardtot2, tdetecttot2= performance_algo
 Plots.plot(x,pfausse2, xlabel="seuil", ylabel="pfa")
 
 plot(t_aGFSS2[100,init:fin], xlabel="temps", ylabel="t_aGFSS")
+plot(t_interpic2[800,:,100], xlabel="temps", ylabel="temps entre les différents pics")
+plot(x,nbpics2[800,:], xlabel="seuil", ylabel="nb pics (1signal)")
+plot(x,moy_interpics2[800,:],xlabel="seuil", ylabel="moyenne du temps entre chaque pic ")
 plot(pfausse2,moytot_interpics2, xlabel="seuil", ylabel="moyenne du temps entre chaque pic ")
 plot(x,tdetecttot2, xlabel="seuil", ylabel="temps 1ère FA ")
