@@ -4,7 +4,6 @@ using EzXML
 using LinearAlgebra
 
 using Plots
-using LaTeXStrings
 pyplot()
 
 using MATLAB
@@ -23,7 +22,7 @@ g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 
 Ln = NormalizedLaplacian(g)
 d, v = eigen(Array(Ln));
-λmax = maximum(d)#d[nv(g)]
+λmax = 2 #maximum(d)#d[nv(g)]
 
 # center normalized Laplacian => |eigen(Lc)| < 1
 Lc = Ln - (λmax/2)*I
@@ -85,7 +84,7 @@ arma_parallel = real.(arma_parallel)
 
 Plots.reset_defaults()
 Plots.scalefontsizes(2)
-plot(μ .+ λmax/2, hμ, w=3, label="GFSS filter: \$ h^\\ast(\\mu)\$", dpi=600)
+plot(μ .+ λmax/2, hμ, w=3, label="GFSS filter \$ h^\\ast(\\mu)\$", dpi=600)
 plot!(μ .+ λmax/2, arma_parallel, w=3, label= "ARMA\$_4\$ GFSS", xlabel = L"\mu", dpi=600)
 
 # savefig("../paper/figs/approx_filt.png")
