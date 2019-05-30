@@ -15,7 +15,7 @@ using Polynomials
 
 function NormalizedLaplacian(g)
     adjmat = LightGraphs.LinAlg.CombinatorialAdjacency(adjacency_matrix(g))
-    Ln = I - Diagonal(adjmat.D.^(-1/2))*(adjmat.A)*Diagonal(adjmat.D.^(-1/2))
+    I - Diagonal(adjmat.D.^(-1/2))*(adjmat.A)*Diagonal(adjmat.D.^(-1/2))
 end
 
 g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())

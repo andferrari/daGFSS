@@ -56,25 +56,36 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
     (nv,nt) = size(x)
     t = zeros(nv, nt)
-
-    v = φ*x[:,1]
-    g = v
-    g_slow = g
-    g_fast = g
-    t[:,1] = (g_fast - g_slow).^2
+    g_slow=zeros(lengtth(ψ))
+    g_fast=zeros(lengtth(ψ))
+    for i in 1:length(ψ)
+        v = φ[i]*x[:,1]
+        g = v
+        g_slow[k] = g
+        g_fast[k] = g
+    end
+    t[:,1] = (sum(g_fast) - sum(g_slow)).^2
 
     for k in 2:nt
-        v = ψ*L*v + φ*x[:,k]
-        g = v + c*x[:,k]
+        for j in 1:length(ψ)
+            v = ψ[j]*L*v + φ[j]*x[:,k]
+            g = v + c*x[:,k]
+            g_slow[k] = (1 - λ)*g_slow + λ*g
+            g_fast[k] = (1 - Λ)*g_fast + Λ*g
+        end
 
-        g_slow = (1 - λ)*g_slow + λ*g
-        g_fast = (1 - Λ)*g_fast + Λ*g
-
-        t[:,k]  = (g_fast - g_slow).^2
+        t[:,k]  = (sum(g_fast) - sum(g_slow)).^2
     end
     return t
 
 end
+
+function calcul_psi_phi(p,r)
+    ψ=ones(length(r))./r
+    φ=r.*ψ
+    return φ, ψ
+end
+
 
 
 function colorbar(cmap, min, mid, max)
@@ -121,6 +132,11 @@ function make_my_graph()
     #G = gsp.Community(N=250, Nc=3, comm_sizes=[50, 120, 80], seed=42)
     g = SimpleDiGraph(G.A.todense())
     savegraph("MyGraph.graphml", g, GraphIO.GraphML.GraphMLFormat())
+end
+
+function NormalizedLaplacian(g)
+    adjmat = LightGraphs.LinAlg.CombinatorialAdjacency(adjacency_matrix(g))
+    I - Diagonal(adjmat.D.^(-1/2))*(adjmat.A)*Diagonal(adjmat.D.^(-1/2))
 end
 
 #function argument_min(λ, Λ, nv)
