@@ -22,7 +22,7 @@ g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 
 Ln = NormalizedLaplacian(g)
 d, v = eigen(Array(Ln));
-λmax = 2 #maximum(d)#d[nv(g)]
+λmax = maximum(d)
 
 # center normalized Laplacian => |eigen(Lc)| < 1
 Lc = Ln - (λmax/2)*I
@@ -84,8 +84,15 @@ arma_parallel = real.(arma_parallel)
 
 Plots.reset_defaults()
 Plots.scalefontsizes(2)
-plot(μ .+ λmax/2, hμ, w=3, label="GFSS filter \$ h^\\ast(\\mu)\$", dpi=600)
-plot!(μ .+ λmax/2, arma_parallel, w=3, label= "ARMA\$_4\$ GFSS", xlabel = L"\mu", dpi=600)
+plot(μ .+ λmax/2, hμ, w=3, label="GFSS filter \$ h^\\ast(\\mu) \$", dpi=600)
+plot!(μ .+ λmax/2, arma_parallel, w=3, label= "ARMA\$_4\$ GFSS", xlabel = "\\mu", dpi=600)
+
+# sol_ls =  hcat(vb, - hμ_va)\hμ
+# pb_ls = Poly(sol_ls[1:kb+1])
+# pa_ls = Poly([1; sol_ls[kb+2:end]])
+# arma_ls = [polyval(pb_ls, μ)/polyval(pa_ls, μ) for μ in μ]
+# plot!(μ .+ λmax/2, arma_ls, w=3, label= "ARMA\$_4\$  unconstraint", xlabel = "\\mu", dpi=600)
+
 
 # savefig("../paper/figs/approx_filt.png")
 # julia> poles
