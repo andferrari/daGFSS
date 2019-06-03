@@ -23,7 +23,9 @@ include("performance_func.jl")
 include("detection_func.jl")
 include("signaux_func.jl")
 g = loadgraph("/Users/lverduci/Documents/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
-L = LightGraphs.laplacian_matrix(g)
+#L = LightGraphs.laplacian_matrix(g)
+L = NormalizedLaplacian(g)
+L=L-I
 d, v = eigen(Array(L));
 
 node_labels = Int.(label_propagation(g, 10000)[1])
@@ -71,7 +73,7 @@ nt=512 #temps d'étude
 init=250
 fin=512
 x=init:1:fin
-sig1, rnd= gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 3);
+sig1= gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 1);
 s1=sig1[findall(in(1), node_labels), x]
 m1=mean(s1,dims=1)
 plt1=plot(x,m1',ribbon=sqrt(3)*ones(512), color=RGB(1,136/255,5/255),label="")
@@ -136,13 +138,14 @@ detect=detect_change(node_labels, sig1,t_aGFSS, t_iaGFSS, t_change ,ρ , d, v,T,
 # detection algorithme 2
 
 φ, ψ=calcul_psi_phi(poles, residues)
+c=addTerm
 
-t_diaGFSS = diaGFSS(sig1, L, ψ[253], φ[132], c; λ = 0.01, Λ=0.1)
-plot(t_diaGFSS', xlabel="temps", ylabel="t_diaGFSS", label="")
+t_diaGFSS, glo, gfas = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
+plot(t_diaGFSS[:,:]', xlabel="temps", ylabel="t_diaGFSS", label="")
 savefig("t_diaGFSS_sig1-4.pdf")
 # T3=get_threshold(t_diaGFSS,0.006,1.8,8) adaptatif
-x=(init+30):1:fin
-T3=5*ones(250,512)
+x=(init):1:fin
+T3=1*ones(250,512)
 p6 = plot(x,t_diaGFSS[:,x]', xlabel="temps", ylabel="t_diaGFSS",label="")
 p7 = plot!(x,T3[:,x]', xlabel="temps", ylabel="seuil", label="")
 savefig("diaGFSS_σ_7_sig1-4.pdf")
@@ -157,13 +160,13 @@ savefig("diaGFSS_σ_7_1noeud_sig1-4.pdf")
 
 t_daGFSS = [norm(t_diaGFSS[:,k])^2 for k in 1:512]
 #T4=get_threshold(t_daGFSS[init:fin],0.018,1.8,10)
-T4=1000*ones(1,263)
+T4=80*ones(1,263)
 p8 = plot(t_daGFSS[x], xlabel="temps", ylabel="t_daGFSS", label="")
 p9 = plot!(T4',xlabel="temps", ylabel="seuil norme")
 savefig("daGFSS_σ_3_sig1-4.pdf")
 
 rnd
-t_change2=detect_t_change(t_daGFSS[x] ,ρ , d, v,T4; λ = 0.01, Λ=0.1 ).+(init+30)
+t_change2=detect_t_change(t_daGFSS[x] ,ρ , d, v,T4; λ = 0.01, Λ=0.1 ).+(init)
 r2=Int(floor(length(t_change2)*rand(1)[1]))
 n_change2=detect_n_change(sig1 , t_diaGFSS,ρ , d, v,t_change2[r2],T3; λ = 0.01, Λ=0.1 )
 detect=detect_change(node_labels,sig1,t_daGFSS,t_diaGFSS, t_change2 ,ρ , d, v,T3, T4, 30; λ = 0.01, Λ=0.1)
