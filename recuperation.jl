@@ -140,6 +140,8 @@ detect=detect_change(node_labels, sig1,t_aGFSS, t_iaGFSS, t_change ,ρ , d, v,T,
 φ, ψ=calcul_psi_phi(poles, residues)
 c=addTerm
 
+
+
 t_diaGFSS, glo, gfas = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 plot(t_diaGFSS[:,:]', xlabel="temps", ylabel="t_diaGFSS", label="")
 savefig("t_diaGFSS_sig1-4.pdf")

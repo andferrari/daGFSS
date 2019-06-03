@@ -77,8 +77,8 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
             Imv2[j,:]=ψ[j].im*L*Rev[j,:] +ψ[j].re*L*Imv[j,:] + φ[j].im*x[:,k]
         end
         g = sum(Rev2, dims=1)[1,:] + c*x[:,k]
-        g_slow = (1 - λ)*g_slow + λ*g
-        g_fast = (1 - Λ)*g_fast + Λ*g
+        g_slow[1,:] = (1 - λ)*g_slow[1,:] + λ*g
+        g_fast[1,:] = (1 - Λ)*g_fast[1,:] + Λ*g
         t[:,k]  = (g_fast - g_slow).^2
         Rev=Rev2
         Imv=Imv2
