@@ -5,7 +5,6 @@ using LinearAlgebra
 using Plots
 
 using LaTeXStrings
-using PyCall
 pyplot()
 
 #using Compose
@@ -16,15 +15,19 @@ using Statistics
 
 
 # load graph
+
 include("gfss_func.jl")
 include("performance_func.jl")
 include("detection_func.jl")
 include("signaux_func.jl")
-g = loadgraph("/Users/lverduci/Documents/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+
+g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 #L = LightGraphs.laplacian_matrix(g)
 L = NormalizedLaplacian(g)
-L=L-I
 d, v = eigen(Array(L));
+λmax = maximum(d)
+
+L= L - (λmax/2)I
 
 node_labels = Int.(label_propagation(g, 10000)[1])
 nodefillc = get(ColorSchemes.jet, rescale(node_labels));
@@ -43,9 +46,9 @@ nb=1000 #nb de signaux créés
 nt=512 #temps d'étude
 ρ = 1.0
 
-φ, ψ=calcul_psi_phi(poles, residues)
+φ, ψ = calcul_psi_phi(poles, residues)
 c=addTerm
 
-sig1= gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 1);
-t_diaGFSS= diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
+sig1 = gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 1);
+t_diaGFSS = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 plot(t_diaGFSS[:,:]', xlabel="temps", ylabel="t_diaGFSS", label="")
