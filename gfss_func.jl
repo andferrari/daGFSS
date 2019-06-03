@@ -56,32 +56,40 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
     (nv,nt) = size(x)
     t = zeros(nv, nt)
-    g_slow=zeros(lengtth(ψ))
-    g_fast=zeros(lengtth(ψ))
+    g_slow=zeros(1,nv)
+    g_fast=zeros(1,nv)
+    v=zeros(length(ψ),nv)
     for i in 1:length(ψ)
-        v = φ[i]*x[:,1]
-        g = v
-        g_slow[k] = g
-        g_fast[k] = g
+        v[i,:] = φ[i].re*x[:,1]
     end
-    t[:,1] = (sum(g_fast) - sum(g_slow)).^2
+    g = sum(v,dims=1)
+    g_slow= g
+    g_fast= g
+    t[:,1] = (g_fast - g_slow).^2
+    Rev=v
+    Imv=zeros(length(ψ),nv)
+    Rev2=zeros(length(ψ),nv)
+    Imv2=zeros(length(ψ),nv)
 
     for k in 2:nt
         for j in 1:length(ψ)
-            v = ψ[j]*L*v + φ[j]*x[:,k]
-            g = v + c*x[:,k]
-            g_slow[k] = (1 - λ)*g_slow + λ*g
-            g_fast[k] = (1 - Λ)*g_fast + Λ*g
+            Rev2[j,:]=ψ[j].re*L*Rev[j,:] -ψ[j].im*L*Imv[j,:] + φ[j].re*x[:,k]
+            Imv2[j,:]=ψ[j].im*L*Rev[j,:] +ψ[j].re*L*Imv[j,:] + φ[j].im*x[:,k]
         end
+        g = sum(Rev2, dims=1)[1,:] + c*x[:,k]
+        g_slow = (1 - λ)*g_slow + λ*g
+        g_fast = (1 - Λ)*g_fast + Λ*g
+        t[:,k]  = (g_fast - g_slow).^2
+        Rev=Rev2
+        Imv=Imv2
 
-        t[:,k]  = (sum(g_fast) - sum(g_slow)).^2
     end
-    return t
+    return t, g_slow, g_fast
 
 end
 
 function calcul_psi_phi(p,r)
-    ψ=ones(length(r))./r
+    ψ=ones(length(p))./p
     φ=r.*ψ
     return φ, ψ
 end
