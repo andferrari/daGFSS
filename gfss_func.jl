@@ -84,7 +84,7 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
         Imv=Imv2
 
     end
-    return t, g_slow, g_fast
+    return t
 
 end
 
