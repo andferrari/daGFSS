@@ -142,7 +142,7 @@ c=addTerm
 
 
 
-t_diaGFSS, glo, gfas = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
+t_diaGFSS= diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 plot(t_diaGFSS[:,:]', xlabel="temps", ylabel="t_diaGFSS", label="")
 savefig("t_diaGFSS_sig1-4.pdf")
 # T3=get_threshold(t_diaGFSS,0.006,1.8,8) adaptatif
