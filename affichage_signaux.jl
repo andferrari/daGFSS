@@ -7,7 +7,6 @@ using LinearAlgebra
 using Plots
 
 using LaTeXStrings
-using PyCall
 pyplot()
 
 #using Compose
@@ -18,11 +17,9 @@ using Statistics
 
 
 # load graph
-include("gfss_func.jl")
-include("performance_func.jl")
-include("detection_func.jl")
 include("signaux_func.jl")
-g = loadgraph("/Users/lverduci/Documents/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+include("gfss_func.jl")
+g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 #L = LightGraphs.laplacian_matrix(g)
 L = NormalizedLaplacian(g)
 d, v = eigen(Array(L));

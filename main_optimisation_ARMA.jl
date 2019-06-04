@@ -61,4 +61,3 @@ for k in 1:length(x)
 end
 filtre #filtre optimal
 plot!(x,filtre, xlab = L"μ", label=L"h^\ast(\mu)")
-savefig("filtres.pdf")
