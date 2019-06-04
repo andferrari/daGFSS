@@ -28,7 +28,7 @@ d, v = eigen(Array(L));
 λmax = maximum(d)
 
 L= L - (λmax/2)I
-
+node_labels = Int.(label_propagation(g, 10000)[1])
 
 # ############################################
 # signal on graph

@@ -25,8 +25,10 @@ include("signaux_func.jl")
 g = loadgraph("/Users/lverduci/Documents/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 #L = LightGraphs.laplacian_matrix(g)
 L = NormalizedLaplacian(g)
-L=L-I
 d, v = eigen(Array(L));
+λmax = maximum(d)
+
+L= L - (λmax/2)I
 
 node_labels = Int.(label_propagation(g, 10000)[1])
 nodefillc = get(ColorSchemes.jet, rescale(node_labels));
@@ -111,6 +113,7 @@ T=get_threshold(t_iaGFSS,0.003,2,10)
 p1 = plot(t_iaGFSS'[:,1:10], xlabel="temps", ylabel="t_iaGFSS")
 p2 = plot(T'[:,1:10], xlabel="temps", ylabel="seuil noeud")
 plot(p1, p2, layout=(2,1))
+
 #detection noeud q
 q=6
 plot(t_iaGFSS[q,:])
@@ -133,45 +136,7 @@ r=Int(floor(length(t_change)*rand(1)[1]))
 n_change=detect_n_change(sig1 , t_iaGFSS,ρ , d, v,t_change[r],T; λ = 0.01, Λ=0.1 )
 detect=detect_change(node_labels, sig1,t_aGFSS, t_iaGFSS, t_change ,ρ , d, v,T, T2, 50; λ = 0.01, Λ=0.1)
 
-# ############################################
 
-# detection algorithme 2
-
-φ, ψ=calcul_psi_phi(poles, residues)
-c=addTerm
-
-
-
-t_diaGFSS= diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
-plot(t_diaGFSS[:,:]', xlabel="temps", ylabel="t_diaGFSS", label="")
-savefig("t_diaGFSS_sig1-4.pdf")
-# T3=get_threshold(t_diaGFSS,0.006,1.8,8) adaptatif
-x=(init):1:fin
-T3=1*ones(250,512)
-p6 = plot(x,t_diaGFSS[:,x]', xlabel="temps", ylabel="t_diaGFSS",label="")
-p7 = plot!(x,T3[:,x]', xlabel="temps", ylabel="seuil", label="")
-savefig("diaGFSS_σ_7_sig1-4.pdf")
-
-q=170
-p8=same_plot(t_diaGFSS[q,x],T3[q,x])
-plot(p8', xlabel="temps", ylabel="seuil noeud q")
-savefig("diaGFSS_σ_7_1noeud_sig1-4.pdf")
-
-
-
-
-t_daGFSS = [norm(t_diaGFSS[:,k])^2 for k in 1:512]
-#T4=get_threshold(t_daGFSS[init:fin],0.018,1.8,10)
-T4=80*ones(1,263)
-p8 = plot(t_daGFSS[x], xlabel="temps", ylabel="t_daGFSS", label="")
-p9 = plot!(T4',xlabel="temps", ylabel="seuil norme")
-savefig("daGFSS_σ_3_sig1-4.pdf")
-
-rnd
-t_change2=detect_t_change(t_daGFSS[x] ,ρ , d, v,T4; λ = 0.01, Λ=0.1 ).+(init)
-r2=Int(floor(length(t_change2)*rand(1)[1]))
-n_change2=detect_n_change(sig1 , t_diaGFSS,ρ , d, v,t_change2[r2],T3; λ = 0.01, Λ=0.1 )
-detect=detect_change(node_labels,sig1,t_daGFSS,t_diaGFSS, t_change2 ,ρ , d, v,T3, T4, 30; λ = 0.01, Λ=0.1)
 
 
 #savefig(plt, "res.pdf")
