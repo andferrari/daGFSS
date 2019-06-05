@@ -56,6 +56,7 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
     (n_v,n_t) = size(x)
     t = zeros(n_v, n_t)
+    t_voisin = zeros(n_v, n_t)
     g_slow = zeros(n_v)
     g_fast = zeros(n_v)
     v = zeros(length(ψ),n_v)
@@ -83,12 +84,13 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
         g_slow = (1 - λ)*g_slow + λ*g
         g_fast = (1 - Λ)*g_fast + Λ*g
 
+        t_voisin[:,k]  = (g_fast - g_slow)
         t[:,k]  = (g_fast - g_slow).^2
         Rev = copy(Rev2)
         Imv = copy(Imv2)
 
     end
-    return t
+    return t, t_voisin
 
 end
 

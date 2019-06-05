@@ -105,10 +105,9 @@ plt25=plot(x,tdetecttot3, xlabel="seuil", ylabel="temps 1ère FA ")
 
 #comparaison des deux méthodes
 plot(plt11,plt21)
-savefig("pda_pf_3.png")
+
 plot(plt12,plt22)
-savefig("core_3.png")
+
 plot(plt14,plt24)
-savefig("retard_3.png")
+
 plot(plt15,plt25)
-savefig("1FA_3.png")
