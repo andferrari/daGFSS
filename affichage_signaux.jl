@@ -41,7 +41,7 @@ plt = gplot(g, locs[1,:], locs[2,:], nodefillc=nodefillc, arrowlengthfrac=0)
 
 nb=1000 #nb de signaux créés
 nt=512 #temps d'étude
-ρ = 1.0
+ρ = 1.0/0.3
 
 # ############################################
 # affichage des clusters
@@ -50,7 +50,7 @@ nt=512 #temps d'étude
 init=250
 fin=512
 x=init:1:fin
-sig1= gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 1);
+sig1= gener_sigg(g, node_labels, 3.0,1, 2.0, Δ_rupt = 112, σ2 = 3);
 s1=sig1[findall(in(1), node_labels), x]
 m1=mean(s1,dims=1)
 plt1=plot(x,m1',ribbon=sqrt(3)*ones(512), color=RGB(1,136/255,5/255),label="")
@@ -76,5 +76,13 @@ s8=sig1[findall(in(8), node_labels), x]
 m8=mean(s8,dims=1)
 plot!(x,m8',ribbon=sqrt(3)*ones(512), color=RGB(76/255,70/255,62/255), label="")
 plt9=plot!(xlab=L"time",ylab=L"signals \ on \ vertices")
-vline!([300], label="")
-#plot(plt9,p3, layout=grid(2,1,heights=[0.7,0.3]), dpi=300)
+vline!([400], label="")
+
+
+
+t_iaGFSS = iaGFSS(sig1, ρ, d, v; λ = 0.01, Λ = 0.1)
+t_aGFSS = [norm(t_iaGFSS[:,k])^2 for k in 1:512]
+p3 = plot(x,t_aGFSS[x],label="", xlab = L"time", ylab=L"t_{aGFSS}")
+
+plot(plt9,p3, layout=grid(2,1,heights=[0.7,0.3]), dpi=300)
+savefig("signaux.pdf")
