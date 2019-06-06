@@ -32,7 +32,7 @@ L= L - (λmax/2)I
 node_labels = Int.(label_propagation(g, 10000)[1])
 
 
-nb=10000 #nb de signaux créés
+nb=100 #nb de signaux créés
 nt=512 #temps d'étude
 ρ = 1.0/0.3
 
@@ -89,15 +89,15 @@ end
 #t_carre
 init=300
 fin=512
-plot(t_carre_daGFSS[800,init:fin],xlabel="temps", ylabel="t_carre_aGFSS")
+plot(t_carre_daGFSS[100,init:fin],xlabel="temps", ylabel="t_carre_aGFSS")
 inter=fin-init # taille de la fenêtre étudiée
 n_rupt = 400
 Δ_rupt = 30
-pas=10000
 mini=round(minimum(t_carre_daGFSS[:,init:fin]))
 maxi=round(maximum(t_carre_daGFSS[:,init:fin]))
-x1=(mini+50):pas:maxi
-T1000=tab_threshold(mini,maxi-40000,pas,nt) #creation d'un tableau de seuils
+pas=(maxi-mini)/size(T100)[1]
+x1=(mini):pas:maxi
+T1000=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
 plot(t_carre_voisin[:,init:fin]',xlabel="temps", ylabel="t_carre_aGFSS", label="")
 T20001=80*ones(250,512)
@@ -107,12 +107,12 @@ pdetect, retardtot, tdetecttot= performance_algo2(nt, sig1, t_carre_daGFSS, t_ca
 
 
 #t_voisin_carre
-plot(t_daGFSS_carre[800,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
-pas=1000000
+plot(t_daGFSS_carre[100,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
 mini2=round(minimum(t_daGFSS_carre[:,init:fin]))
 maxi2=round(maximum(t_daGFSS_carre[:,init:fin]))
+pas=(maxi2-mini2)/size(T1002)[1]
 x2=(mini2):pas:maxi2
-T10002=tab_threshold(mini2,maxi2-20000000,pas,nt)
+T10002=tab_threshold(mini2,maxi2,pas,nt)
 
 plot(t_voisin_carre[:,init:fin]',xlabel="temps", ylabel="t_carre_aGFSS", label="")
 T2000=1000*ones(250,512)
@@ -121,12 +121,12 @@ pdetect2, retardtot2, tdetecttot2= performance_algo2(nt, sig1, t_daGFSS_carre, t
 
 
 #t
-plot(t_daGFSS[800,init:fin],xlabel="temps", ylabel="t_daGFSS")
-pas=100
+plot(t_daGFSS[100,init:fin],xlabel="temps", ylabel="t_daGFSS")
 mini3=round(minimum(t_daGFSS[:,init:fin]))
 maxi3=round(maximum(t_daGFSS[:,init:fin]))
+pas=(maxi3-mini3)/size(T1003)[1]
 x3=(mini3):pas:maxi3
-T10003=tab_threshold(mini3,maxi3+2600,pas,nt)
+T10003=tab_threshold(mini3,maxi3,pas,nt)
 
 plot(t_carre_diaGFSS[:,init:fin]',xlabel="temps", ylabel="t_diaGFSS", label="")
 T20002=10*ones(250,512)
@@ -139,10 +139,10 @@ for k in 1:nb
 end
 sumtot_daGFSS
 
-plot(sumtot_daGFSS[800,init:fin],xlabel="temps", ylabel="t_sum_daGFSS")
-pas=5
+plot(sumtot_daGFSS[100,init:fin],xlabel="temps", ylabel="t_sum_daGFSS")
 mini4=round(minimum(sumtot_daGFSS[:,init:fin]))
 maxi4=round(maximum(sumtot_daGFSS[:,init:fin]))
+pas=(maxi4-mini4)/size(T1004)[1]
 x4=(mini4):pas:maxi4
 T10004=tab_threshold(mini4,maxi4,pas,nt) #creation d'un tableau de seuils
 

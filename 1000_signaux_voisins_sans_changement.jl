@@ -32,7 +32,7 @@ L= L - (λmax/2)I
 node_labels = Int.(label_propagation(g, 10000)[1])
 
 
-nb=10000 #nb de signaux créés
+nb=100 #nb de signaux créés
 nt=512 #temps d'étude
 ρ = 1.0
 
@@ -92,7 +92,7 @@ sumtot_daGFSS
 #t_carre
 init=350
 fin=512
-plot(t_carre_daGFSS[800,init:fin],xlabel="temps", ylabel="t_carre_aGFSS")
+plot(t_carre_daGFSS[100,init:fin],xlabel="temps", ylabel="t_carre_aGFSS")
 inter=fin-init # taille de la fenêtre étudiée
 n_rupt = 400
 Δ_rupt = 30
@@ -100,46 +100,46 @@ pas=100
 mini=round(minimum(t_carre_daGFSS[:,init:fin]))
 maxi=round(maximum(t_carre_daGFSS[:,init:fin]))
 x1=(mini+50):pas:maxi
-T1000=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
+T100=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
 
-pfausse, tdetecttot= performance_algo(nt, t_carre_daGFSS, ρ ,d ,v ,T1000)
+pfausse, tdetecttot= performance_algo(nt, t_carre_daGFSS, ρ ,d ,v ,T100)
 
 
 
 
 
 #t_voisin_carre
-plot(t_daGFSS_carre[800,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
+plot(t_daGFSS_carre[100,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
 pas=10000
 mini2=round(minimum(t_daGFSS_carre[:,init:fin]))
 maxi2=round(maximum(t_daGFSS_carre[:,init:fin]))
 x2=(mini2):pas:maxi2
-T10002=tab_threshold(mini2,maxi2,pas,nt)
+T1002=tab_threshold(mini2,maxi2,pas,nt)
 
 
-pfausse2, tdetecttot2= performance_algo(nt, t_daGFSS_carre, ρ ,d ,v ,T10002,)
+pfausse2, tdetecttot2= performance_algo(nt, t_daGFSS_carre, ρ ,d ,v ,T1002,)
 
 #t
-plot(t_daGFSS[800,init:fin],xlabel="temps", ylabel="t_daGFSS")
+plot(t_daGFSS[100,init:fin],xlabel="temps", ylabel="t_daGFSS")
 pas=1
 mini3=round(minimum(t_daGFSS[:,init:fin]))
 maxi3=round(maximum(t_daGFSS[:,init:fin]))
 x3=(mini3):pas:maxi3
-T10003=tab_threshold(mini3,maxi3,pas,nt)
+T1003=tab_threshold(mini3,maxi3,pas,nt)
 
 
-pfausse3, tdetecttot3= performance_algo(nt, t_daGFSS, ρ ,d ,v ,T10003)
+pfausse3, tdetecttot3= performance_algo(nt, t_daGFSS, ρ ,d ,v ,T1003)
 
 
 #t_sum
 
-plot(sumtot_daGFSS[800,init:fin],xlabel="temps", ylabel="t_sum_daGFSS")
+plot(sumtot_daGFSS[100,init:fin],xlabel="temps", ylabel="t_sum_daGFSS")
 pas=1.5
 mini4=round(minimum(sumtot_daGFSS[:,init:fin]))
 maxi4=round(maximum(sumtot_daGFSS[:,init:fin]))
 x4=(mini4):pas:maxi4
-T10004=tab_threshold(mini4,maxi4+6,pas,nt) #creation d'un tableau de seuils
+T1004=tab_threshold(mini4,maxi4+6,pas,nt) #creation d'un tableau de seuils
 
 
-pfausse4, tdetecttot4= performance_algo(nt, sumtot_daGFSS, ρ ,d ,v ,T10004)
+pfausse4, tdetecttot4= performance_algo(nt, sumtot_daGFSS, ρ ,d ,v ,T1004)
