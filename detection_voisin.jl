@@ -3,15 +3,12 @@ using GraphIO
 using EzXML
 using LinearAlgebra
 using Plots
-
 using LaTeXStrings
 pyplot()
 
-#using Compose
-#using Cairo
 using DelimitedFiles
 using Statistics
-#using Graphs
+
 
 
 # load graph
@@ -34,7 +31,6 @@ node_labels = Int.(label_propagation(g, 10000)[1])
 # ############################################
 # signal on graph
 
-nb=1000 #nb de signaux créés
 nt=512 #temps d'étude
 ρ = 1.0/0.3
 init=250

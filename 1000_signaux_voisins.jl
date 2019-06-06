@@ -6,12 +6,8 @@ using Plots
 
 using LaTeXStrings
 pyplot()
-
-#using Compose
-#using Cairo
 using DelimitedFiles
 using Statistics
-#using Graphs
 
 
 # load graph
@@ -90,7 +86,6 @@ end
 init=300
 fin=512
 plot(t_carre_daGFSS[100,init:fin],xlabel="temps", ylabel="t_carre_aGFSS")
-inter=fin-init # taille de la fenêtre étudiée
 n_rupt = 400
 Δ_rupt = 30
 mini=round(minimum(t_carre_daGFSS[:,init:fin]))

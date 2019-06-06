@@ -8,12 +8,9 @@ using Plots
 
 using LaTeXStrings
 pyplot()
-
-#using Compose
-#using Cairo
 using DelimitedFiles
 using Statistics
-#using Graphs
+
 
 
 # load graph
