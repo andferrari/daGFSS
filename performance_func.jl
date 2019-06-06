@@ -1,7 +1,7 @@
 function performance_algo(nt, t_aGFSS,ρ ,d ,v ,T1000)
     init=350
     fin=512
-    nb=1000
+    nb=100
     inter=fin-init # taille de la fenêtre étudiée
     n_rupt = 400
     Δ_rupt = 30
@@ -36,7 +36,7 @@ end
 function performance_algo2(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
     init=250
     fin=512
-    nb=1000
+    nb=100
     inter=fin-init # taille de la fenêtre étudiée
     n_rupt = 400
     Δ_rupt = 30
