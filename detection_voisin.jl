@@ -37,8 +37,10 @@ init=250
 fin=512
 
 #lancer synth_gfss_parallele pour avoir les poles et les residues
+poles=[0.7344635585485741 + 0.5293681924014867im 0.7344635585485741 - 0.5293681924014867im -0.7344635202651353 + 0.5293681751822871im -0.7344635202651353 - 0.5293681751822871im]
+residues=[-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 0.08206089787078102im 0.16044187053514897 - 0.6853621323079733im 0.16044187053514897 + 0.6853621323079733im]
 φ, ψ = calcul_psi_phi(poles, residues)
-c=addTerm
+c=0.6682305081233931
 
 sig1 = gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 7);
 t_carre_diaGFSS, t_diaGFSS  = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
@@ -67,6 +69,8 @@ detect=detect_change(node_labels,sig1,t_daGFSS,t_diaGFSS, t_change2 ,ρ , d, v,T
 t_voisin=-(t_diaGFSS + A*t_diaGFSS)
 t_voisin_carre = t_voisin.^2
 plot(t_voisin_carre',xlabel="temps", ylabel="t_voisin", label="")
+plot(t_voisin_carre[:,420])
+writedlm("da_GFSS_t420.csv", t_voisin[:,420])
 
 t_carre_voisin=(t_carre_diaGFSS + A*t_carre_diaGFSS)
 plot(t_carre_voisin',xlabel="temps", ylabel="t_voisin", label="")
