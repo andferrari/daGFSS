@@ -83,7 +83,7 @@ end
 arma_parallel = real.(arma_parallel)
 
 Plots.reset_defaults()
-Plots.scalefontsizes(2)
+Plots.scalefontsizes(1.5)
 plot(μ .+ λmax/2, hμ, w=3, label="GFSS filter \$ h^\\ast(\\mu) \$", dpi=600)
 plot!(μ .+ λmax/2, arma_parallel, w=3, label= "ARMA\$_4\$ GFSS", xlabel = "\$\\mu\$", dpi=600)
 

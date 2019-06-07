@@ -10,3 +10,4 @@
 - `detection_voisin.jl`: Test GSFF algo with 1 signal
 - `performance_func.jl`: give functions that allow to calculate pfa, pd
 - `signaux_func.jl`: give the function that create the signal we want
+- `add_sig_gephi.jl`: create a csv to be imported in gephi
