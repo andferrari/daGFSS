@@ -11,6 +11,17 @@ pdetect2 = readdlm("donnees/pdetect2.csv")
 pdetect3 = readdlm("donnees/pdetect3.csv")
 pdetect4 = readdlm("donnees/pdetect4.csv")
 
+retard=readdlm("retard.csv")
+retard2=readdlm("retard2.csv")
+retard3=readdlm("retard3.csv")
+retard4=readdlm("retard4.csv")
+
+
+plot(pfausse2[1:745],retard2, xlabel="pfa", ylabel ="retard",  label="daGFSS", w=2, dpi=300)
+plot!(pfausse3, retard3[57:1123], label="daGFSS Independent", w=2, dpi=300)
+plot!(pfausse[20:729], retard[20:729], label="daGFSS with 2-norm", w=2, dpi=300)
+plot!(pfausse4[25:211], retard4[25:211], label="daGFSS Centralized", w=2, dpi=300)
+
 pyplot()
 
 Plots.reset_defaults()
