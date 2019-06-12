@@ -117,3 +117,21 @@ function performance_algo3(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
 
     return pdetect, retardtot, tdetecttot
 end
+
+function variance_t(φ, ψ, c, L; σ2 =7)
+    Q=zeros(size(L))
+    v=sum(real(φ))
+    r=zeros(size(L))
+    for i in 1:length(φ)
+        for j in 1:length(φ)
+            d=(I-ψ[i]*conj(ψ[j])*(L^2))
+            r=Matrix(d)
+            r=inv(r)
+            Q+=φ[i]*conj(φ[j])*(σ2)*r
+        end
+    end
+    Q+=c*(σ2)*(c-2*v)*I
+    Q = real(Q)
+    R = (λ^2)*Q + (Λ^2)*Q + 2*λ*Λ*Q
+    return R
+end

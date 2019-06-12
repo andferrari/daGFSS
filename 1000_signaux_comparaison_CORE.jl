@@ -30,24 +30,14 @@ node_labels = Int.(label_propagation(g, 10000)[1])
 nb=10000 #nb de signaux créés
 nt=512 #temps d'étude
 ρ = 1.0/0.3
+λ=0.01
+Λ=0.1
 
 #lancer synth_gfss_parallele pour avoir les poles et les residues
 poles=[0.7344635585485741 + 0.5293681924014867im 0.7344635585485741 - 0.5293681924014867im -0.7344635202651353 + 0.5293681751822871im -0.7344635202651353 - 0.5293681751822871im]
 residues=[-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 0.08206089787078102im 0.16044187053514897 - 0.6853621323079733im 0.16044187053514897 + 0.6853621323079733im]
 φ, ψ = calcul_psi_phi(poles, residues)
 c=0.6682305081233931
-Q = variance_t(φ, ψ, c, L; σ =7)
-R = (λ^2)*Q+(Λ^2)*Q + 2*λ*Λ*Q
-variance_ti =R + A*R
-
-σi=zeros(250)
-for i in 1: size(A)[1]
-    for j in 1: size(A)[2]
-        if A[i,j]==1
-            σi[i]+=R[i,j]
-        end
-    end
-end
 
 
 
