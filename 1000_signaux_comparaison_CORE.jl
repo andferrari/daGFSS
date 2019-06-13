@@ -1,8 +1,8 @@
 @everywhere using LightGraphs
-@everywhere using GraphIO
-@everywhere using EzXML
+using GraphIO
+using EzXML
 @everywhere using LinearAlgebra
-@everywhere using Plots
+using Plots
 @everywhere using LaTeXStrings
 @everywhere using DelimitedFiles
 @everywhere using Statistics
@@ -12,8 +12,8 @@
 # load graph
 
 @everywhere include(path*"gfss_func.jl")
-@everywhere include(path*"performance_func.jl")
-@everywhere include(path*"detection_func.jl")
+include(path*"performance_func.jl")
+include(path*"detection_func.jl")
 @everywhere include(path*"signaux_func.jl")
 
 g = loadgraph(path*"donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
@@ -38,7 +38,8 @@ poles=[0.7344635585485741 + 0.5293681924014867im 0.7344635585485741 - 0.52936819
 residues=[-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 0.08206089787078102im 0.16044187053514897 - 0.6853621323079733im 0.16044187053514897 + 0.6853621323079733im]
 φ, ψ = calcul_psi_phi(poles, residues)
 c=0.6682305081233931
-
+variancei=readdlm("variancei.csv")
+σi=sqrt.(variancei)
 
 
 
@@ -61,9 +62,10 @@ sumtot_daGFSS_sc=SharedArray{Float64}(nb,nt)
 end
 
 t_voisin_sc=-(t_diaGFSS_sc + A*t_diaGFSS_sc)
-t_voisin_carre_sc = t_voisin_sc.^2
+t_voisin_carre_sc = (t_voisin_sc.^2)./σi
 
-t_carre_voisin_sc=(t_carre_diaGFSS_sc + A*t_carre_diaGFSS_sc)
+t_carre_voisin_sc=(t_carre_diaGFSS_sc + A*t_carre_diaGFSS_sc)./σi
+t_carre_diaGFSS_sc=t_carre_diaGFSS_sc./σi
 
 @distributed for k in 1:nb
     t_carre_daGFSS_sc[k,:] = [norm(t_carre_voisin_sc[:,i])^2 for i in (k-1)*512+1:k*512]
@@ -74,7 +76,7 @@ end
 @distributed for k in 1:nb
     sumtot_daGFSS_sc[k,:]=sum(t_carre_diaGFSS_sc[:,(k-1)*512+1:k*512],dims=1)
 end
-
+sumtot_daGFSS_sc
 
 
 
@@ -96,20 +98,21 @@ sumtot_daGFSS=SharedArray{Float64}(nb,nt)
 end
 
 t_voisin=-(t_diaGFSS + A*t_diaGFSS)
-t_voisin_carre = t_voisin.^2
+t_voisin_carre = (t_voisin.^2)./σi
 
-t_carre_voisin=(t_carre_diaGFSS + A*t_carre_diaGFSS)
+t_carre_voisin=(t_carre_diaGFSS + A*t_carre_diaGFSS)./σi
+t_carre_diaGFSS=t_carre_diaGFSS./σi
 
 @distributed for k in 1:nb
     t_carre_daGFSS[k,:] = [norm(t_carre_voisin[:,i])^2 for i in (k-1)*512+1:k*512]
     t_daGFSS_carre[k,:] = [norm(t_voisin_carre[:,i])^2 for i in (k-1)*512+1:k*512]
     t_daGFSS[k,:] = [norm(t_carre_diaGFSS[:,i])^2 for i in (k-1)*512+1:k*512]
 end
+t_carre_daGFSS
 
 @distributed for k in 1:nb
     sumtot_daGFSS[k,:]=sum(t_carre_diaGFSS[:,(k-1)*512+1:k*512],dims=1)
 end
-
 
 
 
@@ -124,18 +127,18 @@ fin=512
 plot(t_carre_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_carre_aGFSS")
 n_rupt = 400
 Δ_rupt = 30
-pas=10000
+pas=10
 mini=round(minimum(t_carre_daGFSS_sc[:,init_sc:fin]))
-maxi=round(maximum(t_carre_daGFSS_sc[:,init_sc:fin]))
-x1_sc=(mini+50):pas:maxi
+maxi=round(maximum(t_carre_daGFSS_sc[:,init_sc:fin]))+1000
+x1_sc=(mini):pas:maxi
 T100=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
 pfausse, tdetecttot= performance_algo(nt, t_carre_daGFSS_sc, ρ ,d ,v ,T100)
 
 
-plot(t_carre_daGFSS[100,init:fin],xlabel="temps", ylabel="t_carre_daGFSS")
+plot(t_carre_daGFSS[9000,init:fin],xlabel="temps", ylabel="t_carre_daGFSS")
 mini=round(minimum(t_carre_daGFSS[:,init:fin]))
-maxi=round(maximum(t_carre_daGFSS[:,init:fin]))
+maxi=round(maximum(t_carre_daGFSS[:,init:fin]))+100000
 pas=(maxi-mini)/size(T100)[1]
 x1=(mini):pas:maxi
 T1000=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
@@ -152,9 +155,9 @@ pdetect, retardtot, tdetecttot= performance_algo2(nt, sig1, t_carre_daGFSS, t_ca
 
 #t_voisin_carre
 plot(t_daGFSS_carre_sc[100,init_sc:fin],xlabel="temps", ylabel="t_daGFSS_carre")
-pas=1000000
+pas=1000
 mini2=round(minimum(t_daGFSS_carre_sc[:,init_sc:fin]))
-maxi2=round(maximum(t_daGFSS_carre_sc[:,init_sc:fin]))
+maxi2=round(maximum(t_daGFSS_carre_sc[:,init_sc:fin]))+100000
 x2=(mini2):pas:maxi2
 T1002=tab_threshold(mini2,maxi2,pas,nt)
 
@@ -162,7 +165,7 @@ T1002=tab_threshold(mini2,maxi2,pas,nt)
 pfausse2, tdetecttot2= performance_algo(nt, t_daGFSS_carre_sc, ρ ,d ,v ,T1002,)
 
 
-plot(t_daGFSS_carre[100,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
+plot(t_daGFSS_carre[10,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
 mini2=round(minimum(t_daGFSS_carre[:,init:fin]))
 maxi2=round(maximum(t_daGFSS_carre[:,init:fin]))
 pas=(maxi2-mini2)/size(T1002)[1]
@@ -180,9 +183,9 @@ pdetect2, retardtot2, tdetecttot2= performance_algo2(nt, sig1, t_daGFSS_carre, t
 
 #t
 plot(t_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_daGFSS")
-pas=100
+pas=0.1
 mini3=round(minimum(t_daGFSS_sc[:,init_sc:fin]))
-maxi3=round(maximum(t_daGFSS_sc[:,init_sc:fin]))
+maxi3=round(maximum(t_daGFSS_sc[:,init_sc:fin]))+10
 x3=(mini3):pas:maxi3
 T1003=tab_threshold(mini3,maxi3,pas,nt)
 
@@ -210,7 +213,7 @@ pdetect3, retardtot3, tdetecttot3= performance_algo2(nt, sig1, t_daGFSS, t_carre
 #t_sum
 
 plot(sumtot_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_sum_daGFSS")
-pas=10
+pas=0.1
 mini4=round(minimum(sumtot_daGFSS_sc[:,init_sc:fin]))
 maxi4=round(maximum(sumtot_daGFSS_sc[:,init_sc:fin]))
 x4=(mini4):pas:maxi4
@@ -231,23 +234,13 @@ T10004=tab_threshold(mini4,maxi4,pas,nt) #creation d'un tableau de seuils
 pdetect4, retardtot4, tdetecttot4= performance_algo2(nt, sig1, sumtot_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10004, T20002)
 
 pyplot()
-plot(pfausse2, pdetect2, ratio=:equal, xlabel=L"pfa", ylabel=L"pd", label=L"Centralized \ detection \ \mathbf{d}_t ", w=3)
-plot!(pfausse3, pdetect3, label=L"\mathbf{t}_{daGFSS}(i)^2", w=3)
-plot!(pfausse, pdetect, label=L"independent \ detection \ \mathbf{d}_t(i)^2", w=3)
-plot!(pfausse4, pdetect4, label=L"\sum_{k\in N_\mathcal{G}(i)} \ \mathbf{d}_t(k)^2", dpi=600, w=3)
+plot(pfausse2, pdetect2, ratio=:equal, xlabel=L"pfa", ylabel=L"pd", label="daGFSS", w=3)
+plot!(pfausse3, pdetect3, label="daGFSS Independent", w=3)
+plot!(pfausse, pdetect, label="daGFSS with 2-norm", w=3)
+plot!(pfausse4, pdetect4, label="daGFSS Centralized", dpi=600, w=3)
 
 
-plot(pfausse2,retardtot2, xlabel="pfa", ylabel ="retard",  label=L"Centralized \ detection \ \mathbf{d}_t ")
-plot!(pfausse3, retardtot3, label=L"\mathbf{t}_{daGFSS}(i)^2")
-plot!(pfausse, retardtot, label=L"independent \ detection \ \mathbf{d}_t(i)^2")
-plot!(pfausse4, retardtot4, label=L"\sum_{k\in N_\mathcal{G}(i)} \ \mathbf{d}_t(k)^2")
-
-writedlm("pfausse.csv", pfausse)
-writedlm("pfausse2.csv", pfausse2)
-writedlm("pfausse3.csv", pfausse3)
-writedlm("pfausse4.csv", pfausse4)
-
-writedlm("pdetect.csv", pdetect)
-writedlm("pdetect2.csv", pdetect2)
-writedlm("pdetect3.csv", pdetect3)
-writedlm("pdetect4.csv", pdetect4)
+plot(pfausse2,retardtot2, xlabel="pfa", ylabel ="retard", label="daGFSS")
+plot!(pfausse3, retardtot3, label="daGFSS Independent")
+plot!(pfausse, retardtot, label="daGFSS with 2-norm")
+plot!(pfausse4, retardtot4, label="daGFSS Centralized")
