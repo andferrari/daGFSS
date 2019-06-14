@@ -51,7 +51,7 @@ function performance_algo2(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
                 nsignauxdetect[i]+=1 #donc le signal a été detecté
                 e[i]=e[i]+1 #nb de signaux détectés
                 tdetect[k,i]=t_changeexp[1] #premier temps de detection
-                retard[k,i]=t_changeexp[1]+init-n_rupt #si bonne detection calcul du retard
+                retard[k,i]=t_changeexp[1]#si bonne detection calcul du retard
             end
         end
     end
