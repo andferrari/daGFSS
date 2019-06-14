@@ -120,18 +120,33 @@ end
 
 function variance_t(φ, ψ, c, L; σ2 =7)
     Q=zeros(size(L))
-    v=sum(real(φ))
+    v=real(sum(φ))
     r=zeros(size(L))
     for i in 1:length(φ)
         for j in 1:length(φ)
-            d=(I-ψ[i]*conj(ψ[j])*(L^2))
-            r=Matrix(d)
+            inver=(I-ψ[i]*conj(ψ[j])*(L^2))
+            r=Matrix(inver)
             r=inv(r)
-            Q+=φ[i]*conj(φ[j])*(σ2)*r
+            Q+=real(φ[i]*conj(φ[j])*(σ2)*r)
         end
     end
-    Q+=c*(σ2)*(c-2*v)*I
-    Q = real(Q)
+    Q+=c*(σ2)*(c+2*v)*I
+    Q = Q
     R = (λ^2)*Q + (Λ^2)*Q + 2*λ*Λ*Q
     return R
+end
+
+function variance_t2(φ, ψ, c, d; σ2 =7)
+    Q=0
+    v=real(sum(φ))
+    r=zeros(size(L))
+    for i in 1:length(φ)
+        for j in 1:length(φ)
+            denom=(1-ψ[i]*conj(ψ[j])*(d^2))
+            nom=σ2*φ[i]*conj(φ[j])
+            Q+=real(nom/denom)
+        end
+    end
+    Q+=c*(σ2)*(c+2*v)
+    return Q
 end

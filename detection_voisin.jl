@@ -24,9 +24,10 @@ L = NormalizedLaplacian(g)
 A=adjacency_matrix(g)
 d, v = eigen(Array(L));
 λmax = maximum(d)
-
+d
 L= L - (λmax/2)I
 node_labels = Int.(label_propagation(g, 10000)[1])
+
 
 # ############################################
 # signal on graph
@@ -35,6 +36,9 @@ nt=512 #temps d'étude
 ρ = 1.0/0.3
 init=250
 fin=512
+λ=0.01
+Λ=0.1
+σ=7
 
 #lancer synth_gfss_parallele pour avoir les poles et les residues
 poles=[0.7344635585485741 + 0.5293681924014867im 0.7344635585485741 - 0.5293681924014867im -0.7344635202651353 + 0.5293681751822871im -0.7344635202651353 - 0.5293681751822871im]
@@ -42,10 +46,11 @@ residues=[-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 0.
 φ, ψ = calcul_psi_phi(poles, residues)
 c=0.6682305081233931
 
-sig1 = gener_sigg(g, node_labels, 3.0,1, 3.0, σ2 = 7);
+
+sig1 = gener_sigg(g, node_labels, 1.0,2, 3.0, σ2 = 7);
 t_carre_diaGFSS, t_diaGFSS  = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
-plot(t_diaGFSS[:,:]', xlabel="temps", ylabel="t_diaGFSS", label="")
+plot(t_diaGFSS[1,:], xlabel="temps", ylabel="t_diaGFSS", label="")
 
 x=(init+80):1:fin
 T3=2*ones(250,512)
@@ -69,7 +74,9 @@ detect=detect_change(node_labels,sig1,t_daGFSS,t_diaGFSS, t_change2 ,ρ , d, v,T
 t_voisin=-(t_diaGFSS + A*t_diaGFSS)
 t_voisin_carre = t_voisin.^2
 plot(t_voisin_carre',xlabel="temps", ylabel="t_voisin", label="")
-plot(t_voisin_carre[:,420])
+σi[1]^2
+var(t_voisin[1,:])
+plot(t_voisin[1,:])
 writedlm("da_GFSS_t420.csv", t_voisin[:,420])
 
 t_carre_voisin=(t_carre_diaGFSS + A*t_carre_diaGFSS)
