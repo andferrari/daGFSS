@@ -13,17 +13,11 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
             sig1[findall(in(k), node_labels),:] .= α*(k-1)
         end
         sig1[findall(in(4), node_labels), n_rupt:n_rupt+Δ_rupt] .+= pertu
-
-        sig1 += sqrt(σ2) * randn(nv(g), nt)
-        return sig1
     end
     if choice ==2
         for k in 1:length(node_labels)
             sig1[findall(in(k), node_labels),:] .= α*(k-1)
         end
-
-        sig1 += sqrt(σ2) * randn(nv(g), nt)
-        return sig1
     end
 
 
@@ -35,9 +29,6 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
         sig1[findall(in(5), node_labels), n_rupt:n_rupt+Δ_rupt-1] .+= pertu
         sig1[findall(in(3), node_labels), n_rupt-300:n_rupt+Δ_rupt-301] .+= pertu
         sig1[findall(in(3), node_labels), n_rupt:n_rupt+Δ_rupt-1] .+= pertu
-
-        sig1 += sqrt(σ2) * randn(nv(g), nt)
-        return sig1
     end
 
     if choice==4
@@ -47,9 +38,9 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
             rnd[:,k]=rand(index_nodes,min(4,length(index_nodes)))
             sig1[rnd[:,k], n_rupt:n_rupt+Δ_rupt-1] .+= pertu
         end
-        sig1 += sqrt(σ2) * randn(nv(g), nt)
-        return sig1, rnd
     end
+    sig1 += sqrt(σ2) * randn(nv(g), nt)
+    return sig1
 
     #p_sig1_h0 = gplot(g, locs[1,:], locs[2,:], nodefillc=get(ColorSchemes.jet, rescale(sig1[:,1])))
     #p_sig1_h1 = gplot(g, locs[1,:], locs[2,:], nodefillc=get(ColorSchemes.jet, rescale(sig1[:,n_rupt])))
