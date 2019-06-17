@@ -33,8 +33,6 @@ end
 function performance_algo2(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
     inter=fin-init
     Texp=zeros(1,inter)
-    retard=zeros(nb,size(T1000)[1])
-    retardtot=zeros(size(T1000)[1])
     nsignauxdetect=zeros(size(T1000)[1])
     tdetect=zeros(nb,size(T1000)[1])
     tdetecttot=zeros(size(T1000)[1])
@@ -48,23 +46,51 @@ function performance_algo2(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
             Texp[1,:]=T1000[i,init+1:fin]
             t_changeexp=detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 ) #on detect si il y a changement pour le suil étudié
             if t_changeexp!=zeros(0) #changement
-                nsignauxdetect[i]+=1 #donc le signal a été detecté
                 e[i]=e[i]+1 #nb de signaux détectés
                 tdetect[k,i]=t_changeexp[1] #premier temps de detection
-                retard[k,i]=t_changeexp[1]#si bonne detection calcul du retard
+                nsignauxdetect[i]+=1
             end
         end
     end
     pdetect=e/nb
 
     for i in 1:size(T1000)[1] #moyenne pour chaque seuil de tous les temps
-        retardtot[i]=sum(retard[:,i])/nsignauxdetect[i]
         tdetecttot[i]=sum(tdetect[:,i])/nsignauxdetect[i]
     end
 
 
-    return pdetect, retardtot, tdetecttot
+    return pdetect
 end
+
+function calcul_retard(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
+    inter=fin-init
+    Texp=zeros(1,inter)
+    retard=zeros(nb,size(T1000)[1])
+    retardtot=zeros(size(T1000)[1])
+    nsignauxdetect=zeros(size(T1000)[1])
+
+
+    for k in 1:nb
+        println(k)
+        for i in 1:size(T1000)[1] #test de tous les seuils
+            a=0
+            Texp[1,:]=T1000[i,init+1:fin]
+            t_changeexp=detect_t_change(t_aGFSS[k,n_rupt:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 )
+            if t_changeexp!=zeros(0) #changement
+                retard[k,i]=t_changeexp[1] #si bonne detection calcul du retard
+                nsignauxdetect[i]+=1
+            end
+        end
+    end
+
+    for i in 1:size(T1000)[1] #moyenne pour chaque seuil de tous les temps
+        retardtot[i]=sum(retard[:,i])/nsignauxdetect[i]
+    end
+
+
+    return retardtot
+end
+
 
 function performance_algo3(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
     Texp=zeros(1,inter)

@@ -132,26 +132,24 @@ n_rupt = 400
 plot(t_carre_daGFSS[100,init:fin],xlabel="temps", ylabel="t_carre_daGFSS")
 mini=round(minimum(t_carre_daGFSS[:,init:fin]))
 maxi=round(maximum(t_carre_daGFSS[:,init:fin]))
-pas=5
+pas=10
 x1=(mini):pas:maxi
 T1000=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
 plot(t_carre_voisin[:,init:fin]',xlabel="temps", ylabel="t_carre_aGFSS", label="")
 T20001=80*ones(250,512)
 
-pdetect, retardtot, tdetecttot= performance_algo2(nt, sig1, t_carre_daGFSS, t_carre_voisin, ρ ,d ,v ,T1000, T20001)
+pdetect = performance_algo2(nt, sig1, t_carre_daGFSS, t_carre_voisin, ρ ,d ,v ,T1000, T20001)
+retard = calcul_retard(nt, sig1, t_carre_daGFSS, t_carre_voisin, ρ ,d ,v ,T1000, T20001)
 
 plot(t_carre_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_carre_aGFSS")
 
 pfausse, tdetecttot= performance_algo(nt, t_carre_daGFSS_sc, ρ ,d ,v ,T1000)
 
-plot(pfausse)
-plot!(pdetect)
-
-
+plot(pdetect, retardtot)
 
 #t_voisin_carre
-plot(t_daGFSS_carre[10,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
+plot(t_daGFSS_carre[100,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
 mini2=round(minimum(t_daGFSS_carre[:,init:fin]))
 maxi2=round(maximum(t_daGFSS_carre[:,init:fin]))
 pas=(maxi2-mini2)/size(T1000)[1]
@@ -161,15 +159,14 @@ T10002=tab_threshold(mini2,maxi2,pas,nt)
 plot(t_voisin_carre[:,init:fin]',xlabel="temps", ylabel="t_carre_aGFSS", label="")
 T2000=1000*ones(250,512)
 
-pdetect2, retardtot2, tdetecttot2= performance_algo2(nt, sig1, t_daGFSS_carre, t_voisin_carre, ρ ,d ,v ,T10002, T2000)
+pdetect2 = performance_algo2(nt, sig1, t_daGFSS_carre, t_voisin_carre, ρ ,d ,v ,T10002, T2000)
+retard2 = calcul_retard(nt, sig1, t_daGFSS_carre, t_voisin_carre, ρ ,d ,v ,T10002, T2000)
 
 plot(t_daGFSS_carre_sc[100,init_sc:fin],xlabel="temps", ylabel="t_daGFSS_carre")
 
 pfausse2, tdetecttot2= performance_algo(nt, t_daGFSS_carre_sc, ρ ,d ,v ,T10002,)
 
-plot(pfausse2)
-plot!(pdetect2)
-
+plot(pdetect2, retardtot2)
 
 
 #t
@@ -183,14 +180,14 @@ T10003=tab_threshold(mini3,maxi3,pas,nt)
 plot(t_carre_diaGFSS[:,init:fin]',xlabel="temps", ylabel="t_diaGFSS", label="")
 T20002=10*ones(250,512)
 
-pdetect3, retardtot3, tdetecttot3= performance_algo2(nt, sig1, t_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10003, T20002)
+pdetect3 = performance_algo2(nt, sig1, t_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10003, T20002)
+retard3 = calcul_retard(nt, sig1, t_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10003, T20002)
+
 
 plot(t_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_daGFSS")
 pfausse3, tdetecttot3= performance_algo(nt, t_daGFSS_sc, ρ ,d ,v ,T10003)
 
-plot(pfausse3)
-plot!(pdetect3)
-
+plot(pdetect3, retardtot3)
 
 #t_sum
 plot(sumtot_daGFSS[100,init:fin],xlabel="temps", ylabel="t_sum_daGFSS")
@@ -201,38 +198,34 @@ x4=(mini4):pas:maxi4
 T10004=tab_threshold(mini4,maxi4,pas,nt) #creation d'un tableau de seuils
 
 
-pdetect4, retardtot4, tdetecttot4= performance_algo2(nt, sig1, sumtot_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10004, T20002)
+pdetect4 = performance_algo2(nt, sig1, sumtot_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10004, T20002)
+retard4 = calcul_retard(nt, sig1, sumtot_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10004, T20004)
+
 
 plot(sumtot_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_sum_daGFSS")
 
 
 pfausse4, tdetecttot4= performance_algo(nt, sumtot_daGFSS_sc, ρ ,d ,v ,T10004)
 
-plot(pfausse4)
-plot!(pdetect4)
-
+plot(pdetect4, retardtot4)
 
 pyplot()
-plot(pfausse2, pdetect2, ratio=:equal, xlabel=L"Pfa", ylabel=L"pd", label="daGFSS", w=2)
-plot!(pfausse3, pdetect3, label="daGFSS Independent", w=2)
-plot!(pfausse, pdetect, label="daGFSS with 2-norm", w=2)
-plot!(pfausse4, pdetect4, label="daGFSS Centralized", dpi=600, w=2)
+#plot(pfausse2, pdetect2, ratio=:equal, xlabel=L"Pfa", ylabel=L"pd", label="daGFSS", w=2)
+#plot!(pfausse3, pdetect3, label="daGFSS Independent", w=2)
+#plot!(pfausse, pdetect, label="daGFSS with 2-norm", w=2)
+#plot!(pfausse4, pdetect4, label="daGFSS Centralized", dpi=600, w=2)
 
 
-plot(pfausse2,retardtot2, xlabel="Pfa", ylabel ="retard", label="daGFSS")
-plot!(pfausse3, retardtot3, label="daGFSS Independent")
-plot!(pfausse, retardtot, label="daGFSS with 2-norm")
-plot!(pfausse4, retardtot4, label="daGFSS Centralized")
+plot(pdetect2,retardtot2, xlabel="Pd", ylabel ="Mean detecion delay", label="daGFSS")
+plot!(pdetect3, retardtot3, label="daGFSS Independent")
+plot!(pdetect, retardtot, label="daGFSS with 2-norm")
+plot!(pdetect4, retardtot4, label="daGFSS Centralized",xlims=(0.04,1))
 
-writedlm("pfaussevar.csv",pfausse)
-writedlm("pfausse2var.csv",pfausse2)
-writedlm("pfausse3var.csv",pfausse3)
-writedlm("pfausse4var.csv",pfausse4)
 
-writedlm("pdetectvar.csv",pdetect)
-writedlm("pdetect2var.csv",pdetect2)
-writedlm("pdetect3var.csv",pdetect3)
-writedlm("pdetect4var.csv",pdetect4)
+writedlm("pdetectret.csv",pdetect)
+writedlm("pdetect2ret.csv",pdetect2)
+writedlm("pdetect3ret.csv",pdetect3)
+writedlm("pdetect4ret.csv",pdetect4)
 
 writedlm("retardvar.csv",retardtot)
 writedlm("retard2var.csv",retardtot2)
