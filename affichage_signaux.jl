@@ -43,11 +43,11 @@ nt=512 #temps d'étude
 # ############################################
 # affichage des clusters
 
-σ2 = 3
+σ2 = 10
 init=250
 fin=512
 x=init:1:fin
-sig1= gener_sigg(g, node_labels, 3.0,1, 2.0, Δ_rupt = 112, σ2 = 3);
+sig1= gener_sigg(g, node_labels, 2.4,1, 2.0, Δ_rupt = 112, σ2 = 7);
 s1=sig1[findall(in(1), node_labels), x]
 m1=mean(s1,dims=1)
 plt1=plot(x,m1',ribbon=sqrt(3)*ones(512), color=RGB(1,136/255,5/255),label="")
@@ -73,7 +73,7 @@ s8=sig1[findall(in(8), node_labels), x]
 m8=mean(s8,dims=1)
 plot!(x,m8',ribbon=sqrt(3)*ones(512), color=RGB(76/255,70/255,62/255), label="")
 plt9=plot!(xlab=L"time",ylab=L"signals \ on \ vertices")
-vline!([400], label="")
+vline!([400], w=3, label="")
 
 
 
