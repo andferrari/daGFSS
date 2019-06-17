@@ -132,7 +132,7 @@ n_rupt = 400
 plot(t_carre_daGFSS[100,init:fin],xlabel="temps", ylabel="t_carre_daGFSS")
 mini=round(minimum(t_carre_daGFSS[:,init:fin]))
 maxi=round(maximum(t_carre_daGFSS[:,init:fin]))
-pas=10
+pas=8
 x1=(mini):pas:maxi
 T1000=tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
@@ -146,7 +146,7 @@ plot(t_carre_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_carre_aGFSS")
 
 pfausse, tdetecttot= performance_algo(nt, t_carre_daGFSS_sc, ρ ,d ,v ,T1000)
 
-plot(pdetect, retardtot)
+plot(pfausse, retard)
 
 #t_voisin_carre
 plot(t_daGFSS_carre[100,init:fin],xlabel="temps", ylabel="t_daGFSS_carre")
@@ -166,7 +166,7 @@ plot(t_daGFSS_carre_sc[100,init_sc:fin],xlabel="temps", ylabel="t_daGFSS_carre")
 
 pfausse2, tdetecttot2= performance_algo(nt, t_daGFSS_carre_sc, ρ ,d ,v ,T10002,)
 
-plot(pdetect2, retardtot2)
+plot(pfausse2, retard2)
 
 
 #t
@@ -187,7 +187,7 @@ retard3 = calcul_retard(nt, sig1, t_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10003, T
 plot(t_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_daGFSS")
 pfausse3, tdetecttot3= performance_algo(nt, t_daGFSS_sc, ρ ,d ,v ,T10003)
 
-plot(pdetect3, retardtot3)
+plot(pfausse3, retard3)
 
 #t_sum
 plot(sumtot_daGFSS[100,init:fin],xlabel="temps", ylabel="t_sum_daGFSS")
@@ -199,7 +199,7 @@ T10004=tab_threshold(mini4,maxi4,pas,nt) #creation d'un tableau de seuils
 
 
 pdetect4 = performance_algo2(nt, sig1, sumtot_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10004, T20002)
-retard4 = calcul_retard(nt, sig1, sumtot_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10004, T20004)
+retard4 = calcul_retard(nt, sig1, sumtot_daGFSS, t_carre_diaGFSS, ρ ,d ,v ,T10004, T20002)
 
 
 plot(sumtot_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_sum_daGFSS")
@@ -207,7 +207,7 @@ plot(sumtot_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_sum_daGFSS")
 
 pfausse4, tdetecttot4= performance_algo(nt, sumtot_daGFSS_sc, ρ ,d ,v ,T10004)
 
-plot(pdetect4, retardtot4)
+plot(pfausse4, retard4)
 
 pyplot()
 #plot(pfausse2, pdetect2, ratio=:equal, xlabel=L"Pfa", ylabel=L"pd", label="daGFSS", w=2)
@@ -215,11 +215,13 @@ pyplot()
 #plot!(pfausse, pdetect, label="daGFSS with 2-norm", w=2)
 #plot!(pfausse4, pdetect4, label="daGFSS Centralized", dpi=600, w=2)
 
-
-plot(pdetect2,retardtot2, xlabel="Pd", ylabel ="Mean detecion delay", label="daGFSS")
-plot!(pdetect3, retardtot3, label="daGFSS Independent")
-plot!(pdetect, retardtot, label="daGFSS with 2-norm")
-plot!(pdetect4, retardtot4, label="daGFSS Centralized",xlims=(0.04,1))
+Plots.reset_defaults()
+Plots.scalefontsizes(1.5)
+plot(pfausse2,retard2, xlabel="Pfa", ylabel ="Mean detecion delay", label="daGFSS",w=2)
+plot!(pfausse3, retard3, label="daGFSS Independent", w=2)
+plot!(pfausse, retard, label="daGFSS with 2-norm",w=2)
+plot!(pfausse4[1:800], retard4[1:800], label="daGFSS Centralized",ylims=(7,23), w=2)
+savefig("mean_detection_delay.pdf")
 
 
 writedlm("pdetectret.csv",pdetect)
@@ -227,7 +229,7 @@ writedlm("pdetect2ret.csv",pdetect2)
 writedlm("pdetect3ret.csv",pdetect3)
 writedlm("pdetect4ret.csv",pdetect4)
 
-writedlm("retardvar.csv",retardtot)
-writedlm("retard2var.csv",retardtot2)
-writedlm("retard3var.csv",retardtot3)
-writedlm("retard4var.csv",retardtot4)
+writedlm("retardvar.csv",retard)
+writedlm("retard2var.csv",retard2)
+writedlm("retard3var.csv",retard3)
+writedlm("retard4var.csv",retard4)
