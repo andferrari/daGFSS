@@ -1,4 +1,4 @@
-function performance_algo(nt, t_aGFSS,ρ ,d ,v ,T1000)
+function calculate_pfa(nt, t_aGFSS,ρ ,d ,v ,T1000)
     n_rupt = 400
     Δ_rupt = 30
     inter=fin-init
@@ -30,7 +30,7 @@ function performance_algo(nt, t_aGFSS,ρ ,d ,v ,T1000)
     return pfausse, tdetecttot
 end
 
-function performance_algo2(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
+function calculate_pd(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000)
     inter=fin-init
     Texp=zeros(1,inter)
     nsignauxdetect=zeros(size(T1000)[1])
@@ -62,7 +62,7 @@ function performance_algo2(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
     return pdetect
 end
 
-function calcul_retard(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
+function calculate_delay(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000)
     inter=fin-init
     Texp=zeros(1,inter)
     retard=zeros(nb,size(T1000)[1])

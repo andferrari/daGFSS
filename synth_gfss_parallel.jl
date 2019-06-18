@@ -94,19 +94,3 @@ plot!(μ .+ λmax/2, arma_parallel, w=3, label= "ARMA\$_4\$ GFSS", xlabel = "\$\
 # plot!(μ .+ λmax/2, arma_ls, w=3, label= "ARMA\$_4\$  unconstraint", xlabel = "\\mu", dpi=600)
 
 # savefig("../paper/figs/approx_filt.png")
-# julia> poles
-# 4-element Array{Complex{Float64},1}:
-#   0.7344635585485741 + 0.5293681924014867im
-#   0.7344635585485741 - 0.5293681924014867im
-#  -0.7344635202651353 + 0.5293681751822871im
-#  -0.7344635202651353 - 0.5293681751822871im
-#
-# julia> residues
-# 4-element Array{Complex{Float64},1}:
-#  -0.05322205451164147 - 0.08206089787078102im
-#  -0.05322205451164147 + 0.08206089787078102im
-#   0.16044187053514897 - 0.6853621323079733im
-#   0.16044187053514897 + 0.6853621323079733im
-#
-# julia> addTerm
-# 0.6682305081233931
