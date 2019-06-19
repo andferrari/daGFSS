@@ -27,5 +27,5 @@ function write_nodes_sig(vals, n_vertex, path)
 end
 
 n_vertex = 250
-vals = readdlm("t_voisin_carre_420.csv")
-write_nodes_sig(vals, n_vertex, "plot_t_420.csv")
+vals = readdlm("donnees/t_voisin_carre_420.csv")
+write_nodes_sig(vals, n_vertex, "donnees/plot_t_420.csv")
