@@ -97,9 +97,9 @@ end
 
 #tableau de seuils
 function tab_threshold(min, max, pas, nt)
-    nbvaleur=Int(round((max-min)/pas))
-    T1000=zeros(nbvaleur,nt)
-    for j in 1:nbvaleur
+    nbvalue=Int(round((max-min)/pas))
+    T1000=zeros(nbvalue,nt)
+    for j in 1:nbvalue
         T1000[j,:]=j*pas*ones(512)+min*ones(512)
     end
     return T1000

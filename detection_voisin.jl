@@ -47,23 +47,23 @@ variancei = readdlm("donnees/variancei.csv")
 
 
 sig1 = gener_sigg(g, node_labels, 1.0,1, 0.5, σ2 = 7);
-t_carre_diaGFSS, t_diaGFSS  = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
-t_voisin = -(t_diaGFSS + A*t_diaGFSS)
-t_voisin_carre = (t_voisin.^2)./σi
-maxt = maximum(t_voisin_carre)
+t_square_diaGFSS, t_diaGFSS  = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
+t_neigh = -(t_diaGFSS + A*t_diaGFSS)
+t_neigh_square = (t_neigh.^2)./σi
+maxt = maximum(t_neigh_square)
 
 x = init:1:fin
 T3 = 20*ones(250,512)
 q = 90
-p8 = same_plot(t_voisin_carre[q,x],T3[q,x])
+p8 = same_plot(t_neigh_square[q,x],T3[q,x])
 plot(p8', xlabel="temps", ylabel="seuil noeud q")
 
-t_daGFSS = [norm(t_voisin_carre[:,k])^2 for k in 1:512]
+t_daGFSS = [norm(t_neigh_square[:,k])^2 for k in 1:512]
 T4 = 50000*ones(1,263)
 p8 = plot(t_daGFSS[x], xlabel="temps", ylabel="t_daGFSS", label="")
 p9 = plot!(T4',xlabel="temps", ylabel="seuil norme")
 
 t_change2 = detect_t_change(t_daGFSS[x] ,ρ , d, v,T4; λ = 0.01, Λ=0.1 ).+(init)
 r2 = Int(floor(length(t_change2)*rand(1)[1]))
-n_change2 = detect_n_change(sig1 , t_voisin_carre,ρ , d, v,t_change2[r2],T3; λ = 0.01, Λ=0.1 )
-detect = detect_change(node_labels,sig1, t_daGFSS,t_voisin_carre, t_change2 ,ρ , d, v,T3, T4, 30; λ = 0.01, Λ=0.1)
+n_change2 = detect_n_change(sig1 , t_neigh_square,ρ , d, v,t_change2[r2],T3; λ = 0.01, Λ=0.1 )
+detect = detect_change(node_labels,sig1, t_daGFSS,t_neigh_square, t_change2 ,ρ , d, v,T3, T4, 30; λ = 0.01, Λ=0.1)
