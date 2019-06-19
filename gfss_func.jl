@@ -132,13 +132,6 @@ function plot_tests(sig ,ρ , d, v; λ = 0.01, Λ=0.1)
     p_sig = Plots.plot(p1, p2, p3, layout=(3,1))
 end
 
-function same_plot(plt1, plt2)
-    plt=zeros(2,size(plt1)[1])
-    plt[1,:]=plt1
-    plt[2,:]=plt2
-    return plt
-end
-
 
 function make_my_graph()
     gsp = pyimport("pygsp.graphs")
@@ -152,22 +145,3 @@ function NormalizedLaplacian(g)
     adjmat = LightGraphs.LinAlg.CombinatorialAdjacency(adjacency_matrix(g))
     I - Diagonal(adjmat.D.^(-1/2))*(adjmat.A)*Diagonal(adjmat.D.^(-1/2))
 end
-
-#function argument_min(λ, Λ, nv)
-#    tabarg=zeros(length(Λ))
-#    for k in 1:length(Λ)
-#            tabarg[k]=(sqrt(λ[k]+Λ[k])+(1-λ[k])^(2*nv)-(1-Λ[k])^(2*nv))/((1-λ[k])^(nv)-(1-Λ[k])^(nv))
-#    end
-#    return tabarg
-#end
-
-#function solve(λ, Λ, nv)
-#    isol=0
-#    sol=zeros(length(λ))
-#    for k in 1:length(λ)
-#        sol[k]=abs(log(Λ/λ[k])-nv*log((1-λ[k])/(1-Λ)))
-#    end
-#    isol=findmin(sol)
-#    println(isol)
-#    return λ[isol[2]]
-#end

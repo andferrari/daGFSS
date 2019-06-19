@@ -11,8 +11,6 @@ using Statistics
 
 
 
-# load graph
-
 include("gfss_func.jl")
 include("performance_func.jl")
 include("detection_func.jl")
@@ -23,7 +21,6 @@ L = NormalizedLaplacian(g)
 A = adjacency_matrix(g)
 d, v = eigen(Array(L));
 λmax = maximum(d)
-d
 L = L - (λmax/2)I
 node_labels = Int.(label_propagation(g, 10000)[1])
 
@@ -46,20 +43,19 @@ variancei = readdlm("donnees/variancei.csv")
 σi = sqrt.(variancei)
 
 
-sig1 = gener_sigg(g, node_labels, 1.0,1, 0.5, σ2 = 7);
+sig1 = gener_sigg(g, node_labels, 1.0,1, 1, σ2 = 7);
 t_square_diaGFSS, t_diaGFSS  = diaGFSS(sig1, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 t_neigh = -(t_diaGFSS + A*t_diaGFSS)
 t_neigh_square = (t_neigh.^2)./σi
-maxt = maximum(t_neigh_square)
 
-x = init:1:fin
+x = init:fin
 T3 = 20*ones(250,512)
 q = 90
-p8 = same_plot(t_neigh_square[q,x],T3[q,x])
-plot(p8', xlabel="temps", ylabel="seuil noeud q")
+plot(t_neigh_square[q,x])
+plot!(T3[q,x], xlabel="temps", ylabel="seuil noeud q")
 
 t_daGFSS = [norm(t_neigh_square[:,k])^2 for k in 1:512]
-T4 = 50000*ones(1,263)
+T4 = 100000*ones(1,263)
 p8 = plot(t_daGFSS[x], xlabel="temps", ylabel="t_daGFSS", label="")
 p9 = plot!(T4',xlabel="temps", ylabel="seuil norme")
 
