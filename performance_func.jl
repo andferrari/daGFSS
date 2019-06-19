@@ -92,58 +92,6 @@ function calculate_delay(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000)
 end
 
 
-function performance_algo3(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000, T2000)
-    Texp=zeros(1,inter)
-
-    retard=zeros(nb,size(T1000)[1])
-    retardtot=zeros(size(T1000)[1])
-    nsignauxdetect=zeros(size(T1000)[1])
-    tdetect=zeros(nb,size(T1000)[1])
-    tdetecttot=zeros(size(T1000)[1])
-    e=zeros(size(T1000)[1])
-    e2=zeros(size(T1000)[1])
-    a=0
-
-
-    for k in 1:nb
-        println(k)
-        for i in 1:size(T1000)[1] #test de tous les seuils
-            a=0
-            Texp[1,:]=T1000[i,init+1:fin]
-            t_changeexp=detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 ) #on detect si il y a changement pour le suil étudié
-            if t_changeexp!=zeros(0) #changement
-                nsignauxdetect[i]+=1 #donc le signal a été detecté
-                e[i]=e[i]+1 #nb de signaux détectés
-                tdetect[k,i]=t_changeexp[1] #premier temps de detection
-                if t_changeexp[1]<n_rupt-init+1 || t_changeexp[length(t_changeexp)]>=n_rupt-init+1+Δ_rupt
-                    e2[i]=e2[i]+1 #fausse alarme
-                else
-                    retard[k,i]=t_changeexp[1]+init-n_rupt #si bonne detection calcul du retard
-                    for j in 1:length(t_changeexp)
-                        n_changeexp=detect_n_change(sig1, t_diaGFSS[:,250:512] ,ρ , d, v,t_changeexp[j],T2000; λ = 0.01, Λ=0.1 )
-                        if n_changeexp[1]<minimum(findall(in(8), node_labels)) || n_changeexp[length(n_changeexp)]>maximum(findall(in(8), node_labels))
-                            a=1 #fausse alarme
-                        end
-                    end
-                    if a==1
-                        e2[i]=e2[i]+1 #fausse alarme
-                    end
-                end
-            end
-        end
-    end
-    pdetect=e/nb
-    pfausse=e2/nb
-
-    for i in 1:size(T1000)[1] #moyenne pour chaque seuil de tous les temps
-        retardtot[i]=sum(retard[:,i])/nsignauxdetect[i]
-        tdetecttot[i]=sum(tdetect[:,i])/nsignauxdetect[i]
-    end
-
-
-    return pdetect, retardtot, tdetecttot
-end
-
 function variance_t(φ, ψ, c, L; σ2 =7)
     Q=zeros(size(L))
     v=real(sum(φ))
@@ -151,28 +99,11 @@ function variance_t(φ, ψ, c, L; σ2 =7)
     for i in 1:length(φ)
         for j in 1:length(φ)
             inver=(I-ψ[i]*conj(ψ[j])*(L^2))
-            r=Matrix(inver)
-            r=inv(r)
-            Q+=real(φ[i]*conj(φ[j])*(σ2)*r)
+            r=inv(Matrix(inver))
+            Q+=φ[i]*conj(φ[j])*(σ2)*r
         end
     end
     Q+=c*(σ2)*(c+2*v)*I
-    Q = Q
-    R = (λ^2)*Q + (Λ^2)*Q + 2*λ*Λ*Q
+    R = (λ/(2-λ) + Λ/(2-Λ) + 2*λ*Λ/(λ+Λ-λ*Λ))*Q
     return R
-end
-
-function variance_t2(φ, ψ, c, d; σ2 =7)
-    Q=0
-    v=real(sum(φ))
-    r=zeros(size(L))
-    for i in 1:length(φ)
-        for j in 1:length(φ)
-            denom=(1-ψ[i]*conj(ψ[j])*(d^2))
-            nom=σ2*φ[i]*conj(φ[j])
-            Q+=real(nom/denom)
-        end
-    end
-    Q+=c*(σ2)*(c+2*v)
-    return Q
 end

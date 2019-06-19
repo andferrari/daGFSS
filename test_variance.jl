@@ -15,15 +15,14 @@ using Statistics
 
 include("gfss_func.jl")
 include("performance_func.jl")
-include("detection_func.jl")
 include("signaux_func.jl")
 
 g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A = adjacency_matrix(g)
-d, v = eigen(Array(L));
 λmax = maximum(d)
 L = L - (λmax/2)I
+d, v = eigen(Array(L));
 node_labels = Int.(label_propagation(g, 10000)[1])
 
 
@@ -33,7 +32,7 @@ init = 300
 fin = 512
 λ = 0.01
 Λ = 0.1
-σ = 7
+σ2 = 7
 nb = 100
 
 
@@ -42,7 +41,9 @@ residues = [-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 
 φ, ψ = calcul_psi_phi(poles, residues)
 c = 0.6682305081233931
 
-R = variance_t(φ, ψ, c, L; σ2 =7)
+
+R = real(variance_t(φ, ψ, c, L; σ2 =7))
+R=diag(R).*Matrix{Float64}(I, 250, 250)
 R2 = (I+A)*R*(I+A')
 variance_ti = ones(length(d)).*diag(R2)
 
@@ -74,5 +75,8 @@ end
 variance_ti2 = sum(var_voisin_sc,dims=2)./nb
 
 
-plot(variance_ti)
-plot!(variance_ti2)
+plot(variancei)
+plot!(variance_ti)
+
+variancei = readdlm("donnees/variancei.csv")
+σi = sqrt.(variancei)
