@@ -21,8 +21,8 @@ function diaGFSS_topo(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
     for k in 2:n_t
         for j in 1:length(ψ)
-            Rev2[j,:] = (ψ[j].re)*L[k]*Rev[j,:] - (ψ[j].im)*L[k]*Imv[j,:] + (φ[j].re)*x[:,k]
-            Imv2[j,:] = (ψ[j].im)*L[k]*Rev[j,:] + (ψ[j].re)*L[k]*Imv[j,:] + (φ[j].im)*x[:,k]
+            Rev2[j,:] = (ψ[j].re)*L[:,:,k]*Rev[j,:] - (ψ[j].im)*L[:,:,k]*Imv[j,:] + (φ[j].re)*x[:,k]
+            Imv2[j,:] = (ψ[j].im)*L[:,:,k]*Rev[j,:] + (ψ[j].re)*L[:,:,k]*Imv[j,:] + (φ[j].im)*x[:,k]
         end
 
         g = sum(Rev2, dims=1)[1,:] + c*x[:,k]

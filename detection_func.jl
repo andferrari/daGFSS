@@ -24,7 +24,7 @@ function detect_n_change(sig, t_iaGFSS, ρ , d, v, t, T; λ = 0.01, Λ=0.1)
 
     j=1
     t=Int(t)
-    for k in 1:size(t_iaGFSS,1)
+    for k in 1:size(t_iaGFSS)[1]
         if t_iaGFSS[k,t]>T[k,t]
             j=j+1
         end

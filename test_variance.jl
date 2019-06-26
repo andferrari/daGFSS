@@ -43,9 +43,9 @@ c = 0.6682305081233931
 
 
 R = real(variance_t(φ, ψ, c, L; σ2 =7))
-R = diag(R).*Matrix{Float64}(I, 250, 250)
 R2 = (I+A)*R*(I+A')
 variance_ti = ones(length(d)).*diag(R2)
+writedlm("variancei.csv",variance_ti)
 
 
 
@@ -74,5 +74,5 @@ end
 variance_ti2 = sum(var_neigh_sc,dims=2)./nb
 
 
-plot(variancei)
-plot!(variance_ti)
+plot(variance_ti)
+plot!(variance_ti2)
