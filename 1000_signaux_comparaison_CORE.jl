@@ -18,7 +18,7 @@ g = loadgraph(path*"donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A=adjacency_matrix(g)
 d, v = eigen(Array(L));
-λmax = maximum(d)
+λmax = 2
 L = L - (λmax/2)I
 node_labels = Int.(label_propagation(g, 10000)[1])
 
