@@ -20,7 +20,7 @@ include("signaux_func.jl")
 g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A = adjacency_matrix(g)
-λmax = maximum(d)
+λmax = 2
 L = L - (λmax/2)I
 d, v = eigen(Array(L));
 node_labels = Int.(label_propagation(g, 10000)[1])
@@ -36,14 +36,13 @@ fin = 512
 nb = 100
 
 
-poles = [0.7344635585485741 + 0.5293681924014867im 0.7344635585485741 - 0.5293681924014867im -0.7344635202651353 + 0.5293681751822871im -0.7344635202651353 - 0.5293681751822871im]
-residues = [-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 0.08206089787078102im 0.16044187053514897 - 0.6853621323079733im 0.16044187053514897 + 0.6853621323079733im]
+poles = [0.9284586365913845 + 0.6691948262233165im 0.9284586365913845 - 0.6691948262233165im -0.9284586223955065 + 0.6691948202913867im -0.9284586223955065 - 0.6691948202913867im]
+residues = [-0.09550841212039587 - 0.10204555134224505im -0.09550841212039587 + 0.10204555134224504im -0.023277450874456127 - 0.8479373939514138im  -0.023277450874456127 + 0.8479373939514138im]
 φ, ψ = calcul_psi_phi(poles, residues)
 c = 0.6682305081233931
 
 
 R = real(variance_t(φ, ψ, c, L; σ2 =7))
-R = diag(R).*Matrix{Float64}(I, 250, 250)
 R2 = (I+A)*R*(I+A')
 variance_ti = ones(length(d)).*diag(R2)
 
@@ -74,5 +73,7 @@ end
 variance_ti2 = sum(var_neigh_sc,dims=2)./nb
 
 
-plot(variancei)
-plot!(variance_ti)
+plot(variance_ti)
+plot!(variance_ti2)
+
+writedlm("donnees/variancei.csv", variance_ti)
