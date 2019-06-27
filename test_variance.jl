@@ -45,7 +45,7 @@ c = 0.7257546820209667
 R = real(variance_t(φ, ψ, c, L; σ2 =7))
 R2 = (I+A)*R*(I+A')
 variance_ti = ones(length(d)).*diag(R2)
-writedlm("variancei.csv",variance_ti)
+writedlm("donnees/variancei.csv",variance_ti)
 
 
 
