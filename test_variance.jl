@@ -20,7 +20,7 @@ include("signaux_func.jl")
 g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A = adjacency_matrix(g)
-λmax = 2
+λmax = 2.15
 L = L - (λmax/2)I
 d, v = eigen(Array(L));
 node_labels = Int.(label_propagation(g, 10000)[1])
@@ -39,7 +39,7 @@ nb = 100
 poles = [0.9284586365913845 + 0.6691948262233165im 0.9284586365913845 - 0.6691948262233165im -0.9284586223955065 + 0.6691948202913867im -0.9284586223955065 - 0.6691948202913867im]
 residues = [-0.09550841212039587 - 0.10204555134224505im -0.09550841212039587 + 0.10204555134224504im -0.023277450874456127 - 0.8479373939514138im  -0.023277450874456127 + 0.8479373939514138im]
 φ, ψ = calcul_psi_phi(poles, residues)
-c = 0.6682305081233931
+c = 0.7257546820209667
 
 
 R = real(variance_t(φ, ψ, c, L; σ2 =7))
@@ -76,4 +76,4 @@ variance_ti2 = sum(var_neigh_sc,dims=2)./nb
 plot(variance_ti)
 plot!(variance_ti2)
 
-writedlm("donnees/variancei.csv", variance_ti)
+readdlm("donnees/variancei.csv")
