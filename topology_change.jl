@@ -34,7 +34,7 @@ ntot = 512
 g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L1 = NormalizedLaplacian(g)
 d, v = eigen(Array(L1));
-λmax = maximum(d)
+λmax = 2
 L1 = L1 - (λmax/2)I
 node_labels = Int.(label_propagation(g, 10000)[1])
 sig1 = gener_sigg(g, node_labels, 1.0,1, 1, nt=512, n_rupt = 400, σ2 = 7);
