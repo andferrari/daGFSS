@@ -30,7 +30,7 @@ ntot = 512
 Λ = 0.1
 σ2 = 7
 
-proba = 1:35
+proba = 1:10:800
 retar = zeros(length(proba))
 compt = zeros(length(proba))
 gg = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
@@ -52,7 +52,6 @@ for it in 1:length(proba)
     T3 = 10*ones(250,ntot)
     T4 = 150000*ones(1,263)
 
-
     L = zeros(250,250,ntot)
     L[:,:,1] = L1
     for k in 2:ntot
@@ -61,7 +60,7 @@ for it in 1:length(proba)
         for i in 1:length(e)
             rnd = round(1000*rand(1)[1])
             if rnd<=proba[it]
-                rem_edge!(g1,e[i])
+                add_edge!(g1,e[i])
             end
         end
         L[:,:,k] = NormalizedLaplacian(g1) - (λmax/2)I
@@ -88,6 +87,6 @@ for it in 1:length(proba)
     compt[it] = detect[4]/1400
 end
 
-plot(retar)
+plot(proba./1000, retar)
 
 plot(compt)

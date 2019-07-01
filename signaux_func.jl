@@ -1,4 +1,4 @@
-function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_rupt = 30, σ2 = 1)
+function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_rupt = 112, σ2 = 1)
 
     # choice 1 : changement du cluster 4
     # choice 2 : pas de changement

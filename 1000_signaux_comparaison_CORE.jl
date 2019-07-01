@@ -112,7 +112,7 @@ init=300
 init_sc=300
 fin=512
 n_rupt = 400
-Δ_rupt = 30
+Δ_rupt = 112
 
 
 plot(t_square_daGFSS[100,init:fin],xlabel="temps", ylabel="t_square_daGFSS")
