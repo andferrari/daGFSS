@@ -35,7 +35,7 @@ residues = [-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 
 φ, ψ = calcul_psi_phi(poles, residues)
 c = 0.6682305081233931
 
-variancei = readdlm("variancei.csv")
+variancei = readdlm("donnees/variancei.csv")
 σi = sqrt.(variancei)
 
 
@@ -112,14 +112,14 @@ init=300
 init_sc=300
 fin=512
 n_rupt = 400
-Δ_rupt = 30
+Δ_rupt = 112
 
 
-plot(t_square_daGFSS[100,init:fin],xlabel="temps", ylabel="t_square_daGFSS")
+plot(t_square_daGFSS[400,init:fin],xlabel="temps", ylabel="t_square_daGFSS")
 mini = round(minimum(t_square_daGFSS[:,init:fin]))
 maxi = round(maximum(t_square_daGFSS[:,init:fin]))
-pas = 8
-x1 = (mini):pas:maxi
+pas = 30
+x1 = mini:pas:maxi
 T1000 = tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
 
 pdetect = calculate_pd(nt, sig1, t_square_daGFSS, t_square_neigh, ρ ,d ,v ,T1000)
@@ -186,7 +186,18 @@ pyplot()
 
 Plots.reset_defaults()
 Plots.scalefontsizes(1.5)
-plot(pfa2,delay2, xlabel="Pfa", ylabel ="Mean detecion delay", label="daGFSS",w=2)
-plot!(pfa3, delay3, label="daGFSS Independent", w=2)
-plot!(pfa, delay, label="daGFSS with 2-norm",w=2)
-plot!(pfa4[1:800], delay4[1:800], label="daGFSS Centralized",ylims=(7,23), w=2)
+plot(pfa2,pdetect2, xlabel="Pfa", ylabel ="Mean detecion delay", label="daGFSS",w=2)
+plot!(pfa3, pdetect3, label="daGFSS Independent", w=2)
+plot!(pfa, pdetect, label="daGFSS with 2-norm",w=2)
+plot!(pfa4, pdetect4, label="daGFSS Centralized", aspect_ratio=:equal, w=2)
+
+
+writedlm("donnees/pfausseret.csv", pfa)
+writedlm("donnees/pfausse2ret.csv", pfa2)
+writedlm("donnees/pfausse3ret.csv", pfa3)
+writedlm("donnees/pfausse4ret.csv", pfa4)
+
+writedlm("donnees/pdetectret.csv", pdetect)
+writedlm("donnees/pdetect2ret.csv", pdetect2)
+writedlm("donnees/pdetect3ret.csv", pdetect3)
+writedlm("donnees/pdetect4ret.csv", pdetect4)
