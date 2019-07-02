@@ -96,20 +96,32 @@ plot(compt)
 
 
 
-g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
-L1 = NormalizedLaplacian(g)
-d, v = eigen(Array(L1));
-λmax = 2
-L1 = L1 - (λmax/2)I
-node_labels = Int.(label_propagation(g, 10000)[1])
+
+proba = 1:20
+retard = zeros(length(proba))
+compt = zeros(length(proba))
+
+for it in 1:length(proba)
+    g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+    L1 = NormalizedLaplacian(g)
+    d, v = eigen(Array(L1));
+    λmax = 2
+    L1 = L1 - (λmax/2)I
+    node_labels = Int.(label_propagation(g, 10000)[1])
 
 
-init=300
-x = init:512
-T3 = 10*ones(250,ntot)
-T4 = 150000*ones(1,263)
+    init=300
+    x = init:512
+    T3 = 20*ones(250,ntot)
+    T4 = 150000*ones(1,263)
 
-proba = 10
-L = zeros(250,250,ntot)
-L[:,:,1] = L1
-retard, detect = test_proba(g, L, ψ, φ, c, σi, L1, node_labels, T3, T4, proba)
+
+    L = zeros(250,250,ntot)
+    L[:,:,1] = L1
+    retard[it], compt[it] = test_proba(g, L, ψ, φ, c, σi, L1, node_labels, T3, T4, proba[it])
+
+end
+
+retard
+
+compt

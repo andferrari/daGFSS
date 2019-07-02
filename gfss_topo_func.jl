@@ -72,6 +72,6 @@ function test_proba(g, L, ψ, φ, c, σi, L1, node_labels, T3, T4, proba)
         t_change2 = detect_t_change(t_daGFSS[x] ,ρ , d, v,T4; λ = 0.01, Λ=0.1 ).+(init-1)
         retar = t_change2[1]-400
         detect = detect_change(node_labels,sig1, t_daGFSS,t_neigh_square, t_change2 ,ρ , d, v,T3, T4, 300; λ = 0.01, Λ=0.1)
-        compt = detect[4]/1400
-        return retar, detect
+        compt = detect[4]/4256
+        return retar, compt
     end
