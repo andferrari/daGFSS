@@ -122,6 +122,6 @@ for it in 1:length(proba)
 
 end
 
-retard
+plot(proba./1000, retard)
 
-compt
+plot(proba./1000,compt)
