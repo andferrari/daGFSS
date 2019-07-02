@@ -30,7 +30,7 @@ ntot = 512
 Λ = 0.1
 σ2 = 7
 
-proba = 1:10:800
+proba = 1:2:20
 retar = zeros(length(proba))
 compt = zeros(length(proba))
 gg = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
@@ -38,7 +38,6 @@ node_labelsg = Int.(label_propagation(gg, 10000)[1])
 sig1 = gener_sigg(gg, node_labelsg, 1.0,1, 1, σ2 = 7);
 
 for it in 1:length(proba)
-    println(proba[it])
     g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
     L1 = NormalizedLaplacian(g)
     d, v = eigen(Array(L1));
@@ -57,10 +56,14 @@ for it in 1:length(proba)
     for k in 2:ntot
         g1 = copy(g)
         e = collect(edges(g1))
-        for i in 1:length(e)
-            rnd = round(1000*rand(1)[1])
-            if rnd<=proba[it]
-                add_edge!(g1,e[i])
+        for i in 1:250
+            for j in 1:250
+                if has_edge(g1, i, j)==false
+                    rnd = round(1000*rand(1)[1])
+                    if rnd<=proba[it]
+                        add_edge!(g1,i,j)
+                    end
+                end
             end
         end
         L[:,:,k] = NormalizedLaplacian(g1) - (λmax/2)I
@@ -90,3 +93,23 @@ end
 plot(proba./1000, retar)
 
 plot(compt)
+
+
+
+g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+L1 = NormalizedLaplacian(g)
+d, v = eigen(Array(L1));
+λmax = 2
+L1 = L1 - (λmax/2)I
+node_labels = Int.(label_propagation(g, 10000)[1])
+
+
+init=300
+x = init:512
+T3 = 10*ones(250,ntot)
+T4 = 150000*ones(1,263)
+
+proba = 10
+L = zeros(250,250,ntot)
+L[:,:,1] = L1
+retard, detect = test_proba(g, L, ψ, φ, c, σi, L1, node_labels, T3, T4, proba)
