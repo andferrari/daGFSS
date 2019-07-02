@@ -97,11 +97,12 @@ plot(compt)
 
 
 
-proba = 1:20
+proba = 1:2:50
 retard = zeros(length(proba))
 compt = zeros(length(proba))
 
 for it in 1:length(proba)
+    println(it)
     g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
     L1 = NormalizedLaplacian(g)
     d, v = eigen(Array(L1));
