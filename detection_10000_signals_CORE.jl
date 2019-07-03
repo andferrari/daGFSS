@@ -10,9 +10,9 @@ using Plots
 
 @everywhere path = "/home/verduci/daGFSS/"
 @everywhere include(path*"gfss_func.jl")
-include(path*"performance_func.jl")
+include(path*"performances_func.jl")
 include(path*"detection_func.jl")
-@everywhere include(path*"signaux_func.jl")
+@everywhere include(path*"signals_func.jl")
 
 g = loadgraph(path*"data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)

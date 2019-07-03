@@ -14,8 +14,8 @@ using Statistics
 # load graph
 
 include("gfss_func.jl")
-include("performance_func.jl")
-include("signaux_func.jl")
+include("performances_func.jl")
+include("signals_func.jl")
 
 g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
