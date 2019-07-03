@@ -1,21 +1,21 @@
 function calculate_pfa(nt, t_aGFSS,ρ ,d ,v ,T1000)
     n_rupt = 400
     Δ_rupt = 112
-    inter=fin-init
-    Texp=zeros(1,inter)
-    nsigdetect=zeros(size(T1000)[1])
-    tdetect=zeros(nb,size(T1000)[1])
-    tdetectfin=zeros(size(T1000)[1])
-    e2=zeros(size(T1000)[1])
+    inter = fin-init
+    Texp = zeros(1,inter)
+    nsigdetect = zeros(size(T1000)[1])
+    tdetect = zeros(nb,size(T1000)[1])
+    tdetectfin = zeros(size(T1000)[1])
+    e2 = zeros(size(T1000)[1])
 
 
     for k in 1:nb
         for i in 1:size(T1000)[1] #test de tous les seuils
             Texp[1,:] = T1000[i,init+1:fin]
             t_changeexp = detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 ) #on detect si il y a changement pour le suil étudié
-            if t_changeexp! = zeros(0) #changement
+            if t_changeexp != zeros(0) #changement
                     e2[i] = e2[i]+1 #fausse alarme
-                    nsigdetect[i]+= 1 #donc le signal a été detecté
+                    nsigdetect[i] += 1 #donc le signal a été detecté
                     tdetect[k,i] = t_changeexp[1] #premier temps de detection
             end
         end

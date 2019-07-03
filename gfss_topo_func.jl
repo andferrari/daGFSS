@@ -40,7 +40,7 @@ function diaGFSS_topo(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
 end
 
-function test_proba(g, L, ψ, φ, c, σi, L1, node_labels, T3, T4, proba)
+function test_proba(g, L, d, v, ψ, φ, c, σi, L1, node_labels, T3, T4, proba)
         x = init:512
         for k in 2:ntot
             g1 = copy(g)
