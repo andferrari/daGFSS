@@ -1,6 +1,7 @@
 function calculate_pfa(nt, t_aGFSS,ρ ,d ,v ,T1000)
     n_rupt = 400
     Δ_rupt = 112
+
     inter=fin-init
     Texp=zeros(1,inter)
     nsigdetect=zeros(size(T1000)[1])
@@ -8,39 +9,30 @@ function calculate_pfa(nt, t_aGFSS,ρ ,d ,v ,T1000)
     tdetectfin=zeros(size(T1000)[1])
     e2=zeros(size(T1000)[1])
 
-
     for k in 1:nb
         for i in 1:size(T1000)[1] #test de tous les seuils
-            Texp[1,:]=T1000[i,init+1:fin]
-            t_changeexp=detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 ) #on detect si il y a changement pour le suil étudié
-            if t_changeexp!=zeros(0) #changement
-                    e2[i]=e2[i]+1 #fausse alarme
-                    nsigdetect[i]+=1 #donc le signal a été detecté
-                    tdetect[k,i]=t_changeexp[1] #premier temps de detection
+            Texp[1,:] = T1000[i,init+1:fin]
+            t_changeexp = detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 ) #on detect si il y a changement pour le suil étudié
+            if t_changeexp != zeros(0) #changement
+                    e2[i] = e2[i]+1 #fausse alarme
+                    nsigdetect[i] += 1 #donc le signal a été detecté
+                    tdetect[k,i] = t_changeexp[1] #premier temps de detection
             end
         end
     end
-    pfa=e2/nb
+    pfa = e2/nb
 
     for i in 1:size(T1000)[1] #moyenne pour chaque seuil de tous les temps
-        tdetectfin[i]=sum(tdetect[:,i])/nsigdetect[i]
+        tdetectfin[i] = sum(tdetect[:,i])/nsigdetect[i]
     end
-
-
     return pfa, tdetectfin
 end
 
 function calculate_pd(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000)
-    inter=fin-init
-    Texp=zeros(1,inter)
-    nsigdetect=zeros(size(T1000)[1])
-    tdetect=zeros(nb,size(T1000)[1])
-    tdetectfin=zeros(size(T1000)[1])
-    e=zeros(size(T1000)[1])
-
-
+    inter = fin-init
+    Texp = zeros(1,inter)
+    e = zeros(size(T1000)[1])
     for k in 1:nb
-        println(k)
         for i in 1:size(T1000)[1] #test de tous les seuils
             Texp[1,:]=T1000[i,init+1:fin]
             t_changeexp=detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 ) #on detect si il y a changement pour le suil étudié
@@ -49,7 +41,7 @@ function calculate_pd(nt,sig1, t_aGFSS, t_diaGFSS, ρ ,d ,v ,T1000)
             end
         end
     end
-    pdetect=e/nb
+    pdetect = e/nb
 
     return pdetect
 end
@@ -96,6 +88,6 @@ function variance_t(φ, ψ, c, L; σ2 =7)
         end
     end
     Q+=c*(σ2)*(c+2*v)*I
-    R = (λ/(2-λ) + Λ/(2-Λ) + 2*λ*Λ/(λ+Λ-λ*Λ))*Q
+    R = (λ/(2-λ) + Λ/(2-Λ) - 2*λ*Λ/(λ+Λ-λ*Λ))*Q
     return R
 end

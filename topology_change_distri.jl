@@ -1,20 +1,18 @@
-using LightGraphs
+@everywhere using LightGraphs
 using GraphIO
 using EzXML
-using LinearAlgebra
+@everywhere using LinearAlgebra
 using Plots
-using LaTeXStrings
-pyplot()
-
-using DelimitedFiles
-using Statistics
+@everywhere using LaTeXStrings
+@everywhere using DelimitedFiles
+@everywhere using Statistics
 
 
-include("gfss_func.jl")
-include("performance_func.jl")
-include("detection_func.jl")
-include("signaux_func.jl")
-include("gfss_topo_func.jl")
+@everywhere path = "/home/verduci/daGFSS/"
+@everywhere include(path*"gfss_func.jl")
+include(path*"performance_func.jl")
+include(path*"detection_func.jl")
+@everywhere include(path*"signaux_func.jl")
 
 poles = [0.9284586365913845 + 0.6691948262233165im 0.9284586365913845 - 0.6691948262233165im -0.9284586223955065 + 0.6691948202913867im -0.9284586223955065 - 0.6691948202913867im]
 residues = [-0.09550841212039587 - 0.10204555134224505im -0.09550841212039587 + 0.10204555134224504im -0.023277450874456127 - 0.8479373939514138im  -0.023277450874456127 + 0.8479373939514138im]

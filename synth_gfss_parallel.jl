@@ -22,7 +22,7 @@ g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 
 Ln = NormalizedLaplacian(g)
 d, v = eigen(Array(Ln));
-λmax = maximum(d)
+λmax = 2
 
 # center normalized Laplacian => |eigen(Lc)| < 1
 Lc = Ln - (λmax/2)*I
@@ -33,7 +33,7 @@ Lc = Ln - (λmax/2)*I
 h(μ) = min.(ρ, sqrt.(ρ./(μ.+λmax/2)))
 
 
-n_μ = 300
+n_μ = 400
 μ = range(-λmax/2, stop = λmax/2, length = n_μ)
 hμ = h(μ)
 

@@ -20,7 +20,7 @@ g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A = adjacency_matrix(g)
 d, v = eigen(Array(L));
-λmax = maximum(d)
+λmax = 2
 L = L - (λmax/2)I
 node_labels = Int.(label_propagation(g, 10000)[1])
 
@@ -34,10 +34,10 @@ fin = 512
 Λ = 0.1
 σ2 = 7
 
-poles = [0.7344635585485741 + 0.5293681924014867im 0.7344635585485741 - 0.5293681924014867im -0.7344635202651353 + 0.5293681751822871im -0.7344635202651353 - 0.5293681751822871im]
-residues = [-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 0.08206089787078102im 0.16044187053514897 - 0.6853621323079733im 0.16044187053514897 + 0.6853621323079733im]
+poles = [0.9284586365913845 + 0.6691948262233165im 0.9284586365913845 - 0.6691948262233165im -0.9284586223955065 + 0.6691948202913867im -0.9284586223955065 - 0.6691948202913867im]
+residues = [-0.09550841212039587 - 0.10204555134224505im -0.09550841212039587 + 0.10204555134224504im -0.023277450874456127 - 0.8479373939514138im  -0.023277450874456127 + 0.8479373939514138im]
 φ, ψ = calcul_psi_phi(poles, residues)
-c = 0.6682305081233931
+c = 0.7257546820209667
 
 variancei = readdlm("donnees/variancei.csv")
 σi = sqrt.(variancei)
@@ -49,13 +49,13 @@ t_neigh = -(t_diaGFSS + A*t_diaGFSS)
 t_neigh_square = (t_neigh.^2)./σi
 
 x = init:fin
-T3 = 20*ones(250,512)
+T3 = 20*ones(300,512)
 q = 90
 plot(t_neigh_square[q,x])
 plot!(T3[q,x], xlabel="temps", ylabel="seuil noeud q")
 
 t_daGFSS = [norm(t_neigh_square[:,k])^2 for k in 1:512]
-T4 = 100000*ones(1,263)
+T4 = 120000*ones(1,213)
 p8 = plot(t_daGFSS[x], xlabel="temps", ylabel="t_daGFSS", label="")
 p9 = plot!(T4',xlabel="temps", ylabel="seuil norme")
 

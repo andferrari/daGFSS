@@ -30,10 +30,10 @@ nt = 512
 Λ = 0.1
 
 
-poles = [0.7344635585485741 + 0.5293681924014867im 0.7344635585485741 - 0.5293681924014867im -0.7344635202651353 + 0.5293681751822871im -0.7344635202651353 - 0.5293681751822871im]
-residues = [-0.05322205451164147 - 0.08206089787078102im -0.05322205451164147 + 0.08206089787078102im 0.16044187053514897 - 0.6853621323079733im 0.16044187053514897 + 0.6853621323079733im]
+poles = [0.9284586365913845 + 0.6691948262233165im 0.9284586365913845 - 0.6691948262233165im -0.9284586223955065 + 0.6691948202913867im -0.9284586223955065 - 0.6691948202913867im]
+residues = [-0.09550841212039587 - 0.10204555134224505im -0.09550841212039587 + 0.10204555134224504im -0.023277450874456127 - 0.8479373939514138im  -0.023277450874456127 + 0.8479373939514138im ]
 φ, ψ = calcul_psi_phi(poles, residues)
-c = 0.6682305081233931
+c = 0.7257546820209667
 
 variancei = readdlm("donnees/variancei.csv")
 σi = sqrt.(variancei)
@@ -178,26 +178,3 @@ delay4 = calculate_delay(nt, sig1, sumtot_daGFSS, t_square_diaGFSS, ρ ,d ,v ,T1
 
 plot(sumtot_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_sum_daGFSS")
 pfa4, tdetecttot4= calculate_pfa(nt, sumtot_daGFSS_sc, ρ ,d ,v ,T10004)
-
-
-
-
-pyplot()
-
-Plots.reset_defaults()
-Plots.scalefontsizes(1.5)
-plot(pfa2,pdetect2, xlabel="Pfa", ylabel ="Mean detecion delay", label="daGFSS",w=2)
-plot!(pfa3, pdetect3, label="daGFSS Independent", w=2)
-plot!(pfa, pdetect, label="daGFSS with 2-norm",w=2)
-plot!(pfa4, pdetect4, label="daGFSS Centralized", aspect_ratio=:equal, w=2)
-
-
-writedlm("donnees/pfausseret.csv", pfa)
-writedlm("donnees/pfausse2ret.csv", pfa2)
-writedlm("donnees/pfausse3ret.csv", pfa3)
-writedlm("donnees/pfausse4ret.csv", pfa4)
-
-writedlm("donnees/pdetectret.csv", pdetect)
-writedlm("donnees/pdetect2ret.csv", pdetect2)
-writedlm("donnees/pdetect3ret.csv", pdetect3)
-writedlm("donnees/pdetect4ret.csv", pdetect4)
