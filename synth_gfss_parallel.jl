@@ -2,15 +2,12 @@ using LightGraphs
 using GraphIO
 using EzXML
 using LinearAlgebra
-
 using Plots
 pyplot()
 
 using MATLAB
-
 using Convex
 using Gurobi
-
 using Polynomials
 
 function NormalizedLaplacian(g)
@@ -86,11 +83,3 @@ Plots.reset_defaults()
 Plots.scalefontsizes(1.5)
 plot(μ .+ λmax/2, hμ, w=3, label="GFSS filter \$ h^\\ast(\\mu) \$", dpi=600)
 plot!(μ .+ λmax/2, arma_parallel, w=3, label= "ARMA\$_4\$ GFSS", xlabel = "\$\\mu\$", dpi=600)
-
-# sol_ls =  hcat(vb, - hμ_va)\hμ
-# pb_ls = Poly(sol_ls[1:kb+1])
-# pa_ls = Poly([1; sol_ls[kb+2:end]])
-# arma_ls = [polyval(pb_ls, μ)/polyval(pa_ls, μ) for μ in μ]
-# plot!(μ .+ λmax/2, arma_ls, w=3, label= "ARMA\$_4\$  unconstraint", xlabel = "\\mu", dpi=600)
-
-# savefig("../paper/figs/approx_filt.png")

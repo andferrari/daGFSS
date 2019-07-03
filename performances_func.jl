@@ -10,21 +10,18 @@ function calculate_pfa(nt, t_aGFSS, ρ, d, v, T1000)
     for k in 1:nb
         for i in 1:size(T1000)[1]
             Texp[1,:] = T1000[i,init+1:fin]
-            t_changeexp = detect_t_change(t_aGFSS[k,init+1:fin], ρ, d, v, Texp; λ = 0.01, Λ=0.1) #on detect si il y a changement pour le suil étudié
-            if t_changeexp != zeros(0)
-                    e2[i] = e2[i]+1 #fausse alarme
+            t_changeexp = detect_t_change(t_aGFSS[k,init+1:fin], ρ, d, v, Texp; λ = 0.01, Λ=0.1)
+                    e2[i] = e2[i]+1 #false alarm
                     nsigdetect[i] += 1
-                    tdetect[k,i] = t_changeexp[1] #premier temps de detection
+                    tdetect[k,i] = t_changeexp[1] #first detection time
             end
         end
     end
     pfa = e2/nb
 
-    for i in 1:size(T1000)[1] #moyenne pour chaque seuil de tous les temps
+    for i in 1:size(T1000)[1] #mean for every threshold
         tdetectfin[i] = sum(tdetect[:,i])/nsigdetect[i]
     end
-
-
     return pfa, tdetectfin
 end
 
@@ -39,9 +36,9 @@ function calculate_pd(nt, sig1, t_aGFSS, t_diaGFSS, ρ, d, v, T1000)
     for k in 1:nb
         for i in 1:size(T1000)[1]
             Texp[1,:] = T1000[i,init+1:fin]
-            t_changeexp = detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 ) #on detect si il y a changement pour le suil étudié
+            t_changeexp = detect_t_change(t_aGFSS[k,init+1:fin],ρ , d, v,Texp; λ = 0.01, Λ=0.1 )
             if t_changeexp != zeros(0)
-                e[i] = e[i]+1 #nb de signaux détectés
+                e[i] = e[i]+1 #nb signals detected
             end
         end
     end
@@ -67,7 +64,7 @@ function calculate_delay(nt, sig1, t_aGFSS, t_diaGFSS, ρ, d, v, T1000)
         end
     end
 
-    for i in 1:size(T1000)[1] #moyenne pour chaque seuil de tous les temps
+    for i in 1:size(T1000)[1]
         delaytot[i] = sum(delay[:,i])/nsigdetect[i]
     end
     return delaytot

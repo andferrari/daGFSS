@@ -94,9 +94,9 @@ function diaGFSS(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 
 end
 
-function calcul_psi_phi(p,r)
-    ψ=ones(length(p))'./p
-    φ=r.*ψ
+function calcul_psi_phi( p, r)
+    ψ = ones(length(p))'./p
+    φ = r.*ψ
     return φ, ψ
 end
 
