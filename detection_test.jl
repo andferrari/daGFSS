@@ -53,7 +53,6 @@ T3 = 20*ones(250,512)
 q = 90
 plot(t_neigh_square[:,420])
 plot!(T3[q,x], xlabel="temps", ylabel="seuil noeud q")
-writedlm("data/t_neigh_square_420.csv", t_neigh_square[:,420])
 
 
 t_daGFSS = [norm(t_neigh_square[:,k])^2 for k in 1:512]

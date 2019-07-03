@@ -1,4 +1,4 @@
-function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_rupt = 30, σ2 = 1)
+function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_rupt = 112, σ2 = 1)
 
     # choice 1 : changement du cluster 4
     # choice 2 : pas de changement
@@ -41,15 +41,4 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
     end
     sig1 += sqrt(σ2) * randn(nv(g), nt)
     return sig1
-
-    #p_sig1_h0 = gplot(g, locs[1,:], locs[2,:], nodefillc=get(ColorSchemes.jet, rescale(sig1[:,1])))
-    #p_sig1_h1 = gplot(g, locs[1,:], locs[2,:], nodefillc=get(ColorSchemes.jet, rescale(sig1[:,n_rupt])))
-    #p_sig2_h0 = gplot(g, locs[1,:], locs[2,:], nodefillc=get(ColorSchemes.jet, rescale(sig2[:,1])))
-    #p_sig2_h1 = gplot(g, locs[1,:], locs[2,:], nodefillc=get(ColorSchemes.jet, rescale(sig2[:,n_rupt])))
-
-    #mymap = get(ColorSchemes.jet, range(0,1,length=100))
-    #cbar = colorbar(mymap, 0.0, 0.1, 1.0)
-    #p = gridstack([p_sig1_h0 p_sig1_h1; p_sig2_h0 p_sig2_h1])
-
-
 end

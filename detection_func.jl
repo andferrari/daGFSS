@@ -1,6 +1,5 @@
 #detection du changement temporel avec la norme
 function detect_t_change(t_aGFSS ,ρ , d, v,T; λ = 0.01, Λ=0.1 )
-
     j=1
     for k in 1:length(t_aGFSS)
         if t_aGFSS[k]>T[1,k]
@@ -40,37 +39,6 @@ function detect_n_change(sig, t_iaGFSS, ρ , d, v, t, T; λ = 0.01, Λ=0.1)
     return n_change
 end
 
-#filtrage adaptatif
-function get_threshold(GFSS, n, a, init)
-    if length(size(GFSS))==2
-        (nv,nt) = size(GFSS)
-        T=zeros(nv,nt)
-        for i in 1:nv
-            S1=GFSS[i,1]
-            S2=GFSS[i,1]+maximum(GFSS)/init
-            T[i,1]=a*S2
-            for k in 2:nt
-                S1=GFSS[i,k]
-                S2=(1-n)*S2+n*S1
-                T[i,k]=a*S2
-            end
-        end
-    else
-        nt=length(GFSS)
-        T=zeros(1,nt)
-        S1=GFSS[1]
-        S2=GFSS[1]+maximum(GFSS)/init
-        T[1,1]=a*S2
-        for k in 2:nt
-            S1=GFSS[k]
-            S2=(1-n)*S2+n*S1
-            T[1,k]=a*S2
-        end
-    end
-
-
-    return T
-end
 
 #detection du changement dans les clusters
 function detect_change(node_labels,sig,t_aGFSS, t_iaGFSS, t_change, ρ , d, v,T, T2, s; λ = 0.01, Λ=0.1)
@@ -89,7 +57,7 @@ function detect_change(node_labels,sig,t_aGFSS, t_iaGFSS, t_change, ρ , d, v,T,
     end
     for k in 1:length(detect)
         if detect[k]>=s
-            println("le groupe $k a changé de comportement")
+            println("cluster $k has changed")
         end
     end
     return detect
