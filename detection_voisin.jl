@@ -16,7 +16,7 @@ include("performance_func.jl")
 include("detection_func.jl")
 include("signaux_func.jl")
 
-g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A = adjacency_matrix(g)
 d, v = eigen(Array(L));
@@ -39,7 +39,7 @@ residues = [-0.09550841212039587 - 0.10204555134224505im -0.09550841212039587 + 
 φ, ψ = calcul_psi_phi(poles, residues)
 c = 0.6682305081233931
 
-variancei = readdlm("donnees/variancei.csv")
+variancei = readdlm("data/variancei.csv")
 σi = sqrt.(variancei)
 
 
@@ -53,7 +53,7 @@ T3 = 20*ones(250,512)
 q = 90
 plot(t_neigh_square[:,420])
 plot!(T3[q,x], xlabel="temps", ylabel="seuil noeud q")
-writedlm("donnees/t_neigh_square_420.csv", t_neigh_square[:,420])
+writedlm("data/t_neigh_square_420.csv", t_neigh_square[:,420])
 
 
 t_daGFSS = [norm(t_neigh_square[:,k])^2 for k in 1:512]

@@ -16,7 +16,7 @@ using Statistics
 
 include("signaux_func.jl")
 include("gfss_func.jl")
-g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 d, v = eigen(Array(L));
 λmax = 2

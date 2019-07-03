@@ -14,7 +14,7 @@ include(path*"performance_func.jl")
 include(path*"detection_func.jl")
 @everywhere include(path*"signaux_func.jl")
 
-g = loadgraph(path*"donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+g = loadgraph(path*"data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A=adjacency_matrix(g)
 d, v = eigen(Array(L));

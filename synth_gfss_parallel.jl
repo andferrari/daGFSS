@@ -18,7 +18,7 @@ function NormalizedLaplacian(g)
     I - Diagonal(adjmat.D.^(-1/2))*(adjmat.A)*Diagonal(adjmat.D.^(-1/2))
 end
 
-g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 
 Ln = NormalizedLaplacian(g)
 d, v = eigen(Array(Ln));

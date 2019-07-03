@@ -17,7 +17,7 @@ include("gfss_func.jl")
 include("performance_func.jl")
 include("signaux_func.jl")
 
-g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
+g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A = adjacency_matrix(g)
 λmax = 2.15
@@ -76,4 +76,4 @@ variance_ti2 = sum(var_neigh_sc,dims=2)./nb
 plot(variance_ti)
 plot!(variance_ti2)
 
-readdlm("donnees/variancei.csv")
+readdlm("data/variancei.csv")

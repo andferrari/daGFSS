@@ -1,20 +1,20 @@
 using Plots
 using DelimitedFiles
 
-pfa = readdlm("donnees/pfausseret.csv")
-pfa2 = readdlm("donnees/pfausse2ret.csv")
-pfa3 = readdlm("donnees/pfausse3ret.csv")
-pfa4 = readdlm("donnees/pfausse4ret.csv")
+pfa = readdlm("data/pfausseret.csv")
+pfa2 = readdlm("data/pfausse2ret.csv")
+pfa3 = readdlm("data/pfausse3ret.csv")
+pfa4 = readdlm("data/pfausse4ret.csv")
 
-pdetect = readdlm("donnees/pdetectret.csv")
-pdetect2 = readdlm("donnees/pdetect2ret.csv")
-pdetect3 = readdlm("donnees/pdetect3ret.csv")
-pdetect4 = readdlm("donnees/pdetect4ret.csv")
+pdetect = readdlm("data/pdetectret.csv")
+pdetect2 = readdlm("data/pdetect2ret.csv")
+pdetect3 = readdlm("data/pdetect3ret.csv")
+pdetect4 = readdlm("data/pdetect4ret.csv")
 
-delay = readdlm("donnees/retardvar.csv")
-delay2 = readdlm("donnees/retard2var.csv")
-delay3 = readdlm("donnees/retard3var.csv")
-delay4 = readdlm("donnees/retard4var.csv")
+delay = readdlm("data/retardvar.csv")
+delay2 = readdlm("data/retard2var.csv")
+delay3 = readdlm("data/retard3var.csv")
+delay4 = readdlm("data/retard4var.csv")
 
 
 pyplot()
