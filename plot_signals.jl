@@ -19,8 +19,7 @@ include("gfss_func.jl")
 g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 d, v = eigen(Array(L));
-λmax = 2
-L = L - (λmax/2)I
+L = L - I
 
 node_labels = Int.(label_propagation(g, 10000)[1])
 nodefillc = get(ColorSchemes.jet, rescale(node_labels));
@@ -80,4 +79,3 @@ t_aGFSS = [norm(t_iaGFSS[:,k])^2 for k in 1:512]
 p3 = plot(x,t_aGFSS[x],label="", xlab = L"time", ylab=L"t_{aGFSS}")
 
 plot(plt9,p3, layout=grid(2,1,heights=[0.7,0.3]), dpi=300)
-savefig("signaux.pdf")

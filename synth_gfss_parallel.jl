@@ -19,10 +19,9 @@ g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 
 Ln = NormalizedLaplacian(g)
 d, v = eigen(Array(Ln));
-λmax = 2
 
 # center normalized Laplacian => |eigen(Lc)| < 1
-Lc = Ln - (λmax/2)*I
+Lc = Ln - I
 
 # filter response
 

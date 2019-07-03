@@ -18,8 +18,7 @@ g = loadgraph(path*"data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 A=adjacency_matrix(g)
 d, v = eigen(Array(L));
-λmax = 2
-L = L - (λmax/2)I
+L = L - I
 node_labels = Int.(label_propagation(g, 10000)[1])
 
 
@@ -112,15 +111,15 @@ init=300
 init_sc=300
 fin=512
 n_rupt = 400
-Δ_rupt = 30
+Δ_rupt = 112
 
 
 plot(t_square_daGFSS[100,init:fin],xlabel="temps", ylabel="t_square_daGFSS")
 mini = round(minimum(t_square_daGFSS[:,init:fin]))
 maxi = round(maximum(t_square_daGFSS[:,init:fin]))
-pas = 8
-x1 = (mini):pas:maxi
-T1000 = tab_threshold(mini,maxi,pas,nt) #creation d'un tableau de seuils
+step = 8
+x1 = (mini):step:maxi
+T1000 = tab_threshold(mini,maxi,step,nt) #creation d'un tableau de seuils
 
 pdetect = calculate_pd(nt, sig1, t_square_daGFSS, t_square_neigh, ρ ,d ,v ,T1000)
 delay = calculate_delay(nt, sig1, t_square_daGFSS, t_square_neigh, ρ ,d ,v ,T1000)
@@ -133,9 +132,9 @@ pfa, tdetecttot = calculate_pfa(nt, t_square_daGFSS_sc, ρ ,d ,v ,T1000)
 plot(t_daGFSS_square[100,init:fin],xlabel="temps", ylabel="t_daGFSS_square")
 mini2 = round(minimum(t_daGFSS_square[:,init:fin]))
 maxi2 = round(maximum(t_daGFSS_square[:,init:fin]))
-pas = (maxi2-mini2)/size(T1000)[1]
-x2 = mini2:pas:maxi2
-T10002 = tab_threshold(mini2,maxi2,pas,nt)
+step = (maxi2-mini2)/size(T1000)[1]
+x2 = mini2:step:maxi2
+T10002 = tab_threshold(mini2,maxi2,step,nt)
 
 pdetect2 = calculate_pd(nt, sig1, t_daGFSS_square, t_neigh_square, ρ ,d ,v ,T10002)
 delay2 = calculate_delay(nt, sig1, t_daGFSS_square, t_neigh_square, ρ ,d ,v ,T10002)
@@ -149,9 +148,9 @@ pfa2, tdetecttot2 = calculate_pfa(nt, t_daGFSS_square_sc, ρ ,d ,v ,T10002)
 plot(t_daGFSS[100,init:fin],xlabel="temps", ylabel="t_daGFSS")
 mini3 = round(minimum(t_daGFSS[:,init:fin]))
 maxi3 = round(maximum(t_daGFSS[:,init:fin]))
-pas = (maxi3-mini3)/size(T1000)[1]
-x3 = mini3:pas:maxi3
-T10003 = tab_threshold(mini3,maxi3,pas,nt)
+step = (maxi3-mini3)/size(T1000)[1]
+x3 = mini3:step:maxi3
+T10003 = tab_threshold(mini3,maxi3,step,nt)
 
 
 pdetect3 = calculate_pd(nt, sig1, t_daGFSS, t_square_diaGFSS, ρ ,d ,v ,T10003)
@@ -167,9 +166,9 @@ pfa3, tdetecttot3 = calculate_pfa(nt, t_daGFSS_sc, ρ ,d ,v ,T10003)
 plot(sumtot_daGFSS[100,init:fin],xlabel="temps", ylabel="t_sum_daGFSS")
 mini4 = round(minimum(sumtot_daGFSS[:,init:fin]))
 maxi4 = round(maximum(sumtot_daGFSS[:,init:fin]))
-pas = (maxi4-mini4)/size(T1000)[1]
-x4 = mini4:pas:maxi4
-T10004 = tab_threshold(mini4,maxi4,pas,nt) #creation d'un tableau de seuils
+step = (maxi4-mini4)/size(T1000)[1]
+x4 = mini4:step:maxi4
+T10004 = tab_threshold(mini4,maxi4,step,nt) #creation d'un tableau de seuils
 
 
 pdetect4 = calculate_pd(nt, sig1, sumtot_daGFSS, t_square_diaGFSS, ρ ,d ,v ,T10004)
@@ -178,15 +177,3 @@ delay4 = calculate_delay(nt, sig1, sumtot_daGFSS, t_square_diaGFSS, ρ ,d ,v ,T1
 
 plot(sumtot_daGFSS_sc[100,init_sc:fin],xlabel="temps", ylabel="t_sum_daGFSS")
 pfa4, tdetecttot4= calculate_pfa(nt, sumtot_daGFSS_sc, ρ ,d ,v ,T10004)
-
-
-
-
-pyplot()
-
-Plots.reset_defaults()
-Plots.scalefontsizes(1.5)
-plot(pfa2,delay2, xlabel="Pfa", ylabel ="Mean detecion delay", label="daGFSS",w=2)
-plot!(pfa3, delay3, label="daGFSS Independent", w=2)
-plot!(pfa, delay, label="daGFSS with 2-norm",w=2)
-plot!(pfa4[1:800], delay4[1:800], label="daGFSS Centralized",ylims=(7,23), w=2)

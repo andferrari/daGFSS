@@ -41,7 +41,6 @@ residues = [-0.09550841212039587 - 0.10204555134224505im -0.09550841212039587 + 
 φ, ψ = calcul_psi_phi(poles, residues)
 c = 0.7257546820209667
 
-
 R = real(variance_t(φ, ψ, c, L; σ2 =7))
 R2 = (I+A)*R*(I+A')
 variance_ti = ones(length(d)).*diag(R2)
@@ -53,10 +52,6 @@ sig1_sc = zeros(250, nt*nb)
 t_diaGFSS_sc = zeros(250, nt*nb)
 t_square_diaGFSS_sc = zeros(250, nt*nb)
 
-
-
-
-#création des signaux
 for k in 1:nb
     sig1_sc[:,(k-1)*512+1:k*512] = gener_sigg(g, node_labels, 1.0, 2 , 3.0, σ2 = 7);
     t_square_diaGFSS_sc[:,(k-1)*512+1:k*512], t_diaGFSS_sc[:,(k-1)*512+1:k*512] = diaGFSS(sig1_sc[:,(k-1)*512+1:k*512], L, ψ, φ, c; λ = 0.01, Λ=0.1)
@@ -75,5 +70,3 @@ variance_ti2 = sum(var_neigh_sc,dims=2)./nb
 
 plot(variance_ti)
 plot!(variance_ti2)
-
-readdlm("data/variancei.csv")
