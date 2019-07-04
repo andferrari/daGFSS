@@ -41,7 +41,9 @@ function diaGFSS_topo(x, L, ψ, φ, c; λ = 0.01, Λ=0.1)
 end
 
 function test_proba(g, L, d, v, ψ, φ, c, σi, L1, node_labels, T3, T4, proba)
+        init = 300
         x = init:512
+        ntot = 512
         for k in 2:ntot
             g1 = copy(g)
             e = collect(edges(g1))
@@ -55,7 +57,7 @@ function test_proba(g, L, d, v, ψ, φ, c, σi, L1, node_labels, T3, T4, proba)
                     end
                 end
             end
-            L[:,:,k] = NormalizedLaplacian(g1) - (λmax/2)I
+            L[:,:,k] = NormalizedLaplacian(g1) - I
         end
 
         A = adjacency_matrix(g)
