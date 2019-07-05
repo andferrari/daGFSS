@@ -57,25 +57,24 @@ hμ = h(μ)
 
 # approximation
 
-kb = 4  # num. order   \sum_{i=0}^kb b_i μ^i
-ka = 4  # denum. order 1 + \sum_{i=1}^ka a_i μ^i
+k_ord = 4  # filter order   \sum_{i=0}^k_ord b_i μ^i/1 + \sum_{i=1}^k_ord a_i μ^i
 radius = 0.1
 
-vb = zeros(n_μ, kb+1)
-for k in 1:kb+1
+vb = zeros(n_μ, k_ord +1)
+for k in 1:k_ord +1
     vb[:,k] = μ.^(k-1)
 end
 
-va = zeros(n_μ, ka)
-for k in 1:ka
+va = zeros(n_μ, k_ord )
+for k in 1:k_ord
     va[:,k] = μ.^k
 end
 hμ_va = Diagonal(hμ)*va
 
 # Constrained least squares with CVX
 
-a_cvx = Variable(ka)
-b_cvx = Variable(kb+1)
+a_cvx = Variable(k_ord )
+b_cvx = Variable(k_ord +1)
 
 constraints = [minimum(va*a_cvx) >= -radius, maximum(va*a_cvx) <= radius]
 problem = minimize( norm(vb*b_cvx - hμ_va*a_cvx - hμ), constraints)
