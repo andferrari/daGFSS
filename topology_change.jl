@@ -35,22 +35,28 @@ gg = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 node_labelsg = Int.(label_propagation(gg, 10000)[1])
 sig1 = gener_sigg(gg, node_labelsg, 1.0,1, 1, σ2 = 7);
 
-p = 0:0.01:10
-Ltest = NormalizedLaplacian(gg)
-eigvals(Array(Ltest))
-tab_v = zeros(length(p), 250)
-for k in 1:length(p)
-    tab_v[k,:] = eigvals(Array((1-p[k])*Ltest + p[k]*ones(250,250)))
-end
-plot(tab_v[:,1:249], label="")
+p = 0.01
+Lt = NormalizedLaplacian(gg)
+Lt1 = eigvals(Array(Lt))
+Ltest = laplacian_matrix(gg)
+v1 = eigvals(Array(Ltest))
+v1./diag(Ltest)
+plot(v1./diag(Ltest))
+plot!(Lt1)
+tab_v = eigvals(Array((1-p)*Ltest - p*ones(250,250) + 250*p*Matrix(I,250,250)))
+(1-p).*v1 .+250*p
+plot(tab_v[2:250])
+plot!((1-p)*v1[2:250].+250*p)
 
-proba = 0:0.1:50
+proba = 0:1:50
 retard = zeros(length(proba))
 compt = zeros(length(proba))
 g = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L1 = NormalizedLaplacian(g)
-d, v = eigen(Array(L1));
 L1 = L1 - I
+L1 = laplacian_matrix(g)
+ones(250,250) + L1 -250*Matrix(I,250,250)
+d, v = eigen(Array(L1));
 node_labels = Int.(label_propagation(g, 10000)[1])
 
 
@@ -70,6 +76,6 @@ for it in 1:length(proba)
 
 end
 
-plot(proba[1:26]./1000, retard[1:26], seriestype=:scatter)
+plot(proba./1000, retard, seriestype=:scatter)
 
-plot(proba[1:26]./1000,compt[1:26], seriestype=:scatter)
+plot(proba./1000,compt, seriestype=:scatter)
