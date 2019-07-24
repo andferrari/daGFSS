@@ -12,7 +12,7 @@ function gener_sigg(g,node_labels, α, choice, pertu;nt = 512, n_rupt = 400, Δ_
         for k in 1:length(node_labels)
             sig1[findall(in(k), node_labels),:] .= α*(k-1)
         end
-        sig1[findall(in(4), node_labels), n_rupt:n_rupt+Δ_rupt] .+= pertu
+        sig1[findall(in(1), node_labels), n_rupt:n_rupt+Δ_rupt] .+= pertu
     end
     if choice ==2
         for k in 1:length(node_labels)

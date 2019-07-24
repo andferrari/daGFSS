@@ -30,7 +30,7 @@ function GFSS(x, ρ, μ, Φ)
 
 end
 
-function iaGFSS(x, ρ, μ, Φ; λ = 0.001, Λ=0.01)
+function iaGFSS(x, ρ, μ, Φ; λ = 0.01, Λ=0.1)
 
     (nv,nt) = size(x)
     t = zeros(nv, nt)

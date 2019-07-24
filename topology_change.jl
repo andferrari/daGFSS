@@ -35,18 +35,34 @@ gg = loadgraph("donnees/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 node_labelsg = Int.(label_propagation(gg, 10000)[1])
 sig1 = gener_sigg(gg, node_labelsg, 1.0,1, 1, σ2 = 7);
 
-p = 0.01
+
+
+p = 0.04
 Lt = NormalizedLaplacian(gg)
-Lt1 = eigvals(Array(Lt))
-Ltest = laplacian_matrix(gg)
+
+adjmat = LightGraphs.LinAlg.CombinatorialAdjacency(adjacency_matrix(gg))
+DL = Diagonal(adjmat.D.^(-1))*(adjmat.A)
+rapport = sort(10.032eigvals(Array(DL)))./eigvals(Array(adjmat.A))
+m = 1/mean(adjmat.D)
+mean(rapport)
+
+vt1 = eigvals(Array(Lt))
+Ltest = adjacency_matrix(gg)
+Ltest2 = laplacian_matrix(gg)
 v1 = eigvals(Array(Ltest))
-v1./diag(Ltest)
-plot(v1./diag(Ltest))
-plot!(Lt1)
-tab_v = eigvals(Array((1-p)*Ltest - p*ones(250,250) + 250*p*Matrix(I,250,250)))
-(1-p).*v1 .+250*p
-plot(tab_v[2:250])
-plot!((1-p)*v1[2:250].+250*p)
+plot(sort(ones(250,1) - m.*v1, dims = 1))
+plot!(eigvals(Array(Lt)))
+
+plot(sort(ones(250,1) - m*((1-p).*v1), dims = 1), seriestype=:scatter)
+change = (1-p)*Ltest2 - p*ones(250,250) + 250*p*Matrix(I,250,250)
+change = I - Diagonal(diag(change).^(-1/2))*(Diagonal(diag(change))-change)*Diagonal(diag(change).^(-1/2))
+plot!(sort(eigvals(change)), seriestype=:scatter)
+
+tab_v = eigvals(Array((1-p)*Lt - p*ones(250,250) + 250*p*Matrix(I,250,250)))
+tab_v2 = (1-p).*vt1 .+250*p
+tab_v2[1]-= 250*p
+plot(tab_v)
+plot!(tab_v2)
 
 proba = 0:1:50
 retard = zeros(length(proba))
@@ -75,6 +91,7 @@ for it in 1:length(proba)
     retard[it], compt[it] = test_proba(g, L, d, v, ψ, φ, c, σi, L1, node_labels, T3, T4, proba[it])
 
 end
+
 
 plot(proba./1000, retard, seriestype=:scatter)
 
