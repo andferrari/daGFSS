@@ -1,3 +1,8 @@
+`julia` code for:
+> "Distributed Change Detection in Streaming Graph Signals", <br />
+> A. Ferrari, C. Richard and L. Verduci, <br />
+> *2019 IEEE International Workshop on Computational Advances in Multi-Sensor Adaptive Processing (CAMSAP)*.
+
 # daGFSS
 
 - `synth_gfss_parallel.jl`: plot approximated filter response
