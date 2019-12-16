@@ -3,6 +3,7 @@
 > A. Ferrari, C. Richard and L. Verduci, <br />
 > *2019 IEEE International Workshop on Computational Advances in Multi-Sensor Adaptive Processing (CAMSAP)*.
 
+**The code will be cleaned asap!**
 
 - `synth_gfss_parallel.jl`: compute approximated filter response
 - `affichage_signaux.jl`: plot signals on different clusters and detectors outputs
