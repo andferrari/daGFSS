@@ -1,7 +1,3 @@
-using LightGraphs
-using GraphIO
-using EzXML
-using LinearAlgebra
 using Plots
 pyplot()
 
@@ -9,10 +5,6 @@ using Convex
 using Gurobi
 using Polynomials
 
-function NormalizedLaplacian(g)
-    adjmat = LightGraphs.LinAlg.CombinatorialAdjacency(adjacency_matrix(g))
-    I - Diagonal(adjmat.D.^(-1/2))*(adjmat.A)*Diagonal(adjmat.D.^(-1/2))
-end
 
 """
      r, p, k = my_residue(b, a)
@@ -36,13 +28,6 @@ function my_residue(b, a)
     return r/a[end], p, c
 end
 
-g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
-
-Ln = NormalizedLaplacian(g)
-d, v = eigen(Array(Ln));
-
-# center normalized Laplacian => |eigen(Lc)| < 1
-Lc = Ln - I
 
 # filter response
 
