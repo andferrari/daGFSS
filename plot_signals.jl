@@ -1,6 +1,5 @@
 using LightGraphs
 using GraphIO
-using GraphPlot
 using EzXML
 using ColorSchemes
 using LinearAlgebra
@@ -8,23 +7,18 @@ using Plots
 
 using LaTeXStrings
 pyplot()
-using DelimitedFiles
 using Statistics
-
-
 
 
 include("signals_func.jl")
 include("gfss_func.jl")
+
 g = loadgraph("data/MyGraph.graphml", GraphIO.GraphML.GraphMLFormat())
 L = NormalizedLaplacian(g)
 d, v = eigen(Array(L));
 L = L - I
 
 node_labels = Int.(label_propagation(g, 10000)[1])
-nodefillc = get(ColorSchemes.jet, rescale(node_labels));
-locs = readdlm("locs.csv")
-plt = gplot(g, locs[1,:], locs[2,:], nodefillc=nodefillc, arrowlengthfrac=0)
 
 
 nb = 1000
@@ -78,4 +72,4 @@ t_iaGFSS = iaGFSS(sig1, ρ, d, v; λ = 0.01, Λ = 0.1)
 t_aGFSS = [norm(t_iaGFSS[:,k])^2 for k in 1:512]
 p3 = plot(x,t_aGFSS[x],label="", xlab = L"time", ylab=L"t_{aGFSS}")
 
-plot(plt9,p3, layout=grid(2,1,heights=[0.7,0.3]), dpi=300)
+plot(plt9,p3, layout=Plots.grid(2,1,heights=[0.7,0.3]), dpi=300)

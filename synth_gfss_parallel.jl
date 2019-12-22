@@ -56,7 +56,7 @@ for k in 1:k_ord
 end
 hμ_va = Diagonal(hμ)*va
 
-# Constrained least squares with CVX
+# Constrained least squares with Convex.Jl
 
 a_cvx = Variable(k_ord )
 b_cvx = Variable(k_ord +1)
